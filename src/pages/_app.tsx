@@ -1,10 +1,12 @@
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
+import { Inter } from "@next/font/google";
 
 import { trpc } from "../utils/trpc";
 
 import "../styles/globals.css";
+const inter = Inter({ subsets: ["latin"] });
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -12,7 +14,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <main className={inter.className + " container mx-auto h-full max-w-md"}>
+        <Component {...pageProps} />
+      </main>
     </SessionProvider>
   );
 };
