@@ -6,6 +6,7 @@ import { Inter } from "@next/font/google";
 import { trpc } from "../utils/trpc";
 
 import "../styles/globals.css";
+import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -16,6 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <main className={inter.className + " container mx-auto h-full max-w-md"}>
         <Component {...pageProps} />
+        <Toaster />
       </main>
     </SessionProvider>
   );
