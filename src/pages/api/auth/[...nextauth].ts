@@ -20,19 +20,10 @@ export const authOptions: NextAuthOptions = {
   },
   // Include user.id on session
   callbacks: {
-    // session: async ({ session, user }) => {
-    //   if (session.user) {
-    //     session.user.id = user.id;
-    //   }
-    //   return session;
-    // },
-    jwt: async ({ token, user, account }) => {
-      console.log({ account });
-      user && (token.user = user);
+    jwt: async ({ token, user }) => {
       if (user) {
-        token.uid = user.id;
+        token.user = user;
       }
-      console.log({ token });
       return token;
     },
   },

@@ -23,7 +23,7 @@ export default function Michael() {
   }
 
   return (
-    <>
+    <div className="flex h-full flex-auto flex-col">
       <header className="w-full bg-indigo-600 px-4 pt-4 pb-6 text-indigo-200">
         <h1 className="text-xs font-medium uppercase leading-4 tracking-wider">
           Camp Registration
@@ -39,7 +39,7 @@ export default function Michael() {
         </p>
       </header>
 
-      <div className="h-auto p-5 pb-16">
+      <div className="flex-grow p-5">
         <h3 className="mb-1 text-lg font-medium leading-6">Registration</h3>
         <p className="mb-6 text-sm font-normal leading-5">
           Please enter your phone number below. You will then receive an SMS
@@ -67,20 +67,22 @@ export default function Michael() {
         <div className="overflow-hidden">
           <pre>{JSON.stringify(session, null, 2)}</pre>
         </div>
+      </div>
 
-        <div className="absolute bottom-8 left-0 w-full px-4">
-          <button
-            type="button"
-            onClick={handleCredentialsSignIn}
-            className="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Next
-            <ArrowRightIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
-          </button>
+      <div className="p-5">
+        <button
+          type="button"
+          onClick={handleCredentialsSignIn}
+          className="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          Next
+          <ArrowRightIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
+        </button>
+        <div className="flex justify-between">
           <button onClick={() => signIn("google")}>Sign in with Google</button>
           <button onClick={() => signOut()}>Sign Out</button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

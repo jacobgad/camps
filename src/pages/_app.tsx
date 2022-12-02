@@ -15,7 +15,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <main className={inter.className + " container mx-auto h-full max-w-md"}>
+      <main className={inter.className + " h-full"}>
         <Component {...pageProps} />
         <Toaster />
       </main>
