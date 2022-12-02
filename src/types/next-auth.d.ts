@@ -10,3 +10,10 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 }
+
+declare module "next-auth/jwt/types" {
+  interface JWT extends DefaultSession["user"] {
+    id: string;
+    phone?: string;
+  }
+}

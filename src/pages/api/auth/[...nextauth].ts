@@ -15,13 +15,25 @@ function text({ url, host }: { url: string; host: string }) {
 }
 
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   // Include user.id on session
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    // session: async ({ session, user }) => {
+    //   if (session.user) {
+    //     session.user.id = user.id;
+    //   }
+    //   return session;
+    // },
+    jwt: async ({ token, user, account }) => {
+      console.log({ account });
+      user && (token.user = user);
+      if (user) {
+        token.uid = user.id;
       }
-      return session;
+      console.log({ token });
+      return token;
     },
   },
   pages: {
@@ -68,7 +80,8 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         console.log("credentials");
         console.log(credentials);
-        if (!credentials?.phone || !credentials.token) return null;
+        if (!credentials?.phone || !credentials.token)
+          throw new Error("Phone number or code not valid");
         const verificationToken = await prisma.verificationToken.findFirst({
           where: {
             identifier: credentials.phone,
@@ -77,7 +90,11 @@ export const authOptions: NextAuthOptions = {
           },
         });
         console.log({ verificationToken });
-        if (!verificationToken) return null;
+        if (!verificationToken)
+          throw new Error("Phone number or code not valid");
+        // prisma.verificationToken.deleteMany({
+        //   where: { identifier: credentials.phone },
+        // });
         const user = await prisma.user.findUnique({
           where: { phone: credentials.phone },
         });

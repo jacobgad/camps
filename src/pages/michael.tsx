@@ -1,5 +1,5 @@
 import ArrowRightIcon from "@heroicons/react/20/solid/ArrowRightIcon";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import InputWithButton from "../components/forms/InputWithButton";
@@ -77,6 +77,8 @@ export default function Michael() {
             Next
             <ArrowRightIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
           </button>
+          <button onClick={() => signIn("google")}>Sign in with Google</button>
+          <button onClick={() => signOut()}>Sign Out</button>
         </div>
       </div>
     </>
