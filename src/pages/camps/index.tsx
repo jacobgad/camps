@@ -10,7 +10,7 @@ export default function Camps() {
   console.log(data);
 
   return (
-    <div className="p-5">
+    <div className="p-4">
       <h1>Camps</h1>
       <Link href="/camps/new">New Camp</Link>
 

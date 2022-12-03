@@ -7,13 +7,8 @@ declare module "next-auth" {
   interface Session {
     user?: {
       id: string;
+      // phone?: string;
+      // gender?: "male" | "female";
     } & DefaultSession["user"];
-  }
-}
-
-declare module "next-auth/jwt/types" {
-  interface JWT extends DefaultSession["user"] {
-    id: string;
-    phone?: string;
   }
 }

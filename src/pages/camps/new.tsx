@@ -8,8 +8,8 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
 const schema = z.object({
-  name: z.string().min(5),
-  organiser: z.string().min(5),
+  name: z.string().min(4),
+  organiser: z.string().min(4),
 });
 
 export default function New() {
@@ -30,7 +30,7 @@ export default function New() {
   });
 
   return (
-    <div className="p-5">
+    <div className="p-4">
       <h1 className="mb-4">New Camp</h1>
 
       <form

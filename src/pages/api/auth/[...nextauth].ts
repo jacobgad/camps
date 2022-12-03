@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
         if (!phoneNumber) throw new Error("invalid phone number");
         try {
           await twilio.messages.create({
-            messagingServiceSid: "MG73ed4d7a02a2c82c5c98e137aade97d9",
+            messagingServiceSid: env.TWILIO_MESSAGE_SERVICE,
             from: "Camps",
             to: phoneNumber,
             body: `Your code is: ${token}`,

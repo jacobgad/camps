@@ -4,7 +4,7 @@ import { signIn, signOut } from "next-auth/react";
 
 const Home: NextPage = () => {
   return (
-    <div className="p-5">
+    <div className="p-4">
       <h1>Camps</h1>
 
       <nav>

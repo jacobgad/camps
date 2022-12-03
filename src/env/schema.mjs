@@ -23,6 +23,7 @@ export const serverSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().min(1),
   TWILIO_ACCOUNT_SID: z.string().min(1),
   TWILIO_AUTH_TOKEN: z.string().min(1),
+  TWILIO_MESSAGE_SERVICE: z.string().min(1),
 });
 
 /**

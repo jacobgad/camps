@@ -65,9 +65,9 @@ model User {
   name          String?
   email         String?      @unique
   emailVerified DateTime?
-  phone         String?   @unique
-  phoneVerified DateTime?
   image         String?
+  phone         String?      @unique
+  gender        Gender?
   accounts      Account[]
   sessions      Session[]
   CampToUser    CampToUser[]
@@ -79,4 +79,9 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum Gender {
+  male
+  female
 }

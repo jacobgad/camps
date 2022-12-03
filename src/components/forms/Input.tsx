@@ -35,9 +35,9 @@ const Input = forwardRef<Ref, InputProps>(function Input(
           type={rest.type ?? "text"}
           ref={ref}
           id={rest.id ?? id}
-          className={`block w-full rounded-md border-gray-300 ${
+          className={`block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-gray-50 disabled:text-gray-500 sm:text-sm ${
             Icon && "pl-10"
-          } focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm`}
+          }`}
         />
       </div>
       <p className="h-4 text-xs text-red-500">{error}</p>
