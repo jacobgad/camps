@@ -1,26 +1,15 @@
 import ArrowRightIcon from "@heroicons/react/20/solid/ArrowRightIcon";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { trpc } from "../utils/trpc";
-import InputWithButton from "../components/forms/InputWithButton";
-import InputWithIcon from "../components/forms/InputWithIcon";
+import InputWithButton from "../../../components/forms/InputWithButton";
+import Input from "../../../components/forms/Input";
 import { HashtagIcon } from "@heroicons/react/20/solid";
-import toast from "react-hot-toast";
+import Link from "next/link";
+import Button from "../../../components/Button";
+import Image from "next/image";
 
-export default function Michael() {
-  const { mutate } = trpc.auth.sendTokenSMS.useMutation();
+export default function Register() {
   const [values, setValues] = useState({ phone: "", token: "" });
-
-  const session = useSession();
-
-  function handleCredentialsSignIn() {
-    const promise = signIn("credentials", { ...values, redirect: false });
-    toast.promise(promise, {
-      loading: "Checking your code...",
-      success: "Welcome",
-      error: "Oops there was an error",
-    });
-  }
 
   return (
     <div className="flex h-full flex-auto flex-col">
@@ -53,34 +42,43 @@ export default function Michael() {
             setValue={(v) => setValues({ ...values, phone: v })}
             button={{
               label: "Verify",
-              onClick: () => mutate({ identifier: values.phone }),
+              onClick: () =>
+                signIn("email", {
+                  email: values.phone + "@phone.number",
+                  redirect: false,
+                }),
             }}
           />
-          <InputWithIcon
+          <Input
             Icon={HashtagIcon}
             label="Verification Code"
             value={values.token}
             onChange={(e) => setValues({ ...values, token: e.target.value })}
           />
         </div>
-
-        <div className="overflow-hidden">
-          <pre>{JSON.stringify(session, null, 2)}</pre>
-        </div>
       </div>
 
       <div className="p-5">
-        <button
-          type="button"
-          onClick={handleCredentialsSignIn}
-          className="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          Next
-          <ArrowRightIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
-        </button>
-        <div className="flex justify-between">
-          <button onClick={() => signIn("google")}>Sign in with Google</button>
-          <button onClick={() => signOut()}>Sign Out</button>
+        <div className="space-y-2">
+          <Button Icon={ArrowRightIcon}>
+            <Link
+              href={`/api/auth/callback/email?token=${
+                values.token
+              }&email=${encodeURIComponent(values.phone + "@phone.number")}`}
+            >
+              Next
+            </Link>
+          </Button>
+          <Button onClick={() => signIn("google")}>
+            <Image
+              src="/assets/googleLogo.svg"
+              alt="Google Logo"
+              width={20}
+              height={20}
+              className="mr-2"
+            />
+            Sign in with Google
+          </Button>
         </div>
       </div>
     </div>
