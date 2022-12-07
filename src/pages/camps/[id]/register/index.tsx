@@ -1,61 +1,61 @@
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { ArrowRightIcon, HashtagIcon } from "@heroicons/react/20/solid";
+import { signIn, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useState } from "react";
 import Button from "../../../../components/Button";
-import SmsAuthLogin from "../../../../components/registration/SmsAuthLogin";
-import UpdatePersonalInfo from "../../../../components/registration/UpdatePersonalInfo";
-import { trpc } from "../../../../utils/trpc";
+import Input from "../../../../components/forms/Input";
+import InputWithButton from "../../../../components/forms/InputWithButton";
+import RegisterHeader from "../../../../components/RegisterHeader";
 
 export default function Register() {
-  const router = useRouter();
-  const id = router.query.id as string;
-  const { data } = trpc.camps.getCamp.useQuery(
-    { id },
-    {
-      enabled: !!id,
-    }
-  );
-
   const session = useSession();
-  const [step, setStep] = useState(0);
+  const [values, setValues] = useState({ phone: "", token: "" });
 
   return (
-    <div className="flex h-full flex-auto flex-col">
-      <header className="w-full bg-indigo-600 px-4 pt-4 pb-6 text-indigo-200">
-        <h1 className="text-xs font-medium uppercase leading-4 tracking-wider">
-          Camp Registration
-        </h1>
-        <h2 className="mb-1 text-2xl font-extrabold leading-8 text-indigo-50">
-          {data?.name}
-        </h2>
-        <p className="text-xs font-medium uppercase leading-4 tracking-wide">
-          {data?.organiser}
-        </p>
-      </header>
+    <div className="flex h-full flex-col">
+      <RegisterHeader />
 
       <div className="flex-grow p-4">
-        {session.status === "loading" && <p>loading...</p>}
-        {(session.status === "unauthenticated" || step === 0) && (
-          <SmsAuthLogin />
-        )}
-        {session.status === "authenticated" && step === 1 && (
-          <UpdatePersonalInfo />
-        )}
+        <h3 className="mb-1 text-lg font-medium leading-6">Registration</h3>
+        <p className="mb-6 text-sm font-normal leading-5">
+          Please enter your phone number below. You will then receive an SMS
+          message with a link to complete registration
+        </p>
+
+        <div className="grid gap-6">
+          <InputWithButton
+            label="Phone Number"
+            value={values.phone}
+            setValue={(v) => setValues({ ...values, phone: v })}
+            button={{
+              label: "Verify",
+              onClick: () =>
+                signIn("email", {
+                  email: values.phone + "@phone.number",
+                  redirect: false,
+                }),
+            }}
+          />
+          <Input
+            Icon={HashtagIcon}
+            disabled={!values.phone}
+            label="Verification Code"
+            value={values.token}
+            onChange={(e) => setValues({ ...values, token: e.target.value })}
+          />
+        </div>
       </div>
 
-      <div className="flex justify-center gap-2">
-        {[0, 1, 2, 3].map((val) => (
-          <input
-            key={val}
-            type="radio"
-            defaultChecked={val === step}
-            className="h-5 w-5 border-none transition"
-          />
-        ))}
-      </div>
-      <div className="flex gap-2 p-4">
-        <Button onClick={() => step > 0 && setStep(step - 1)}>Back</Button>
-        <Button onClick={() => step < 3 && setStep(step + 1)}>Next</Button>
+      <div className="m-4">
+        <Button Icon={ArrowRightIcon}>
+          <Link
+            href={`/api/auth/callback/email?callbackUrl=http://localhost:3000/camps/clb7yzoc40001jv09f8z0d125/register/updateInfo&token=${
+              values.token
+            }&email=${encodeURIComponent(values.phone + "@phone.number")}`}
+          >
+            Next {session.status === "loading" && "loading..."}
+          </Link>
+        </Button>
       </div>
     </div>
   );
