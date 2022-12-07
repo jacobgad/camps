@@ -1,17 +1,24 @@
 import type { NextPage } from "next";
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 const SignIn: NextPage = () => {
-  const { query } = useRouter();
-  const callbackUrl = query.callbackUrl as string | undefined;
+  const router = useRouter();
+  const callbackUrl = (router.query.callbackUrl as string | undefined) ?? "/";
 
   return (
     <div className="flex min-h-screen flex-col items-center p-4">
       <h1 className="mb-4 text-xl">Sign In</h1>
       <div className="grid w-full gap-2">
         <button
-          onClick={() => signIn("google", { callbackUrl })}
+          onClick={() => {
+            toast.promise(signIn("google", { callbackUrl }), {
+              error: "Error signing in",
+              loading: "Loading...",
+              success: "Welcome",
+            });
+          }}
           className="w-full rounded border bg-white px-4 py-2"
         >
           Sign In with Google
@@ -36,7 +43,17 @@ const SignIn: NextPage = () => {
           Sign In with Email
         </button>
 
-        <button onClick={() => signOut()}>Sign Out</button>
+        <button
+          onClick={() => {
+            toast.promise(signOut({ callbackUrl: "/" }), {
+              error: "Error signing out",
+              loading: "Loading...",
+              success: "Goodbye",
+            });
+          }}
+        >
+          Sign Out
+        </button>
       </div>
     </div>
   );

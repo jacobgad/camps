@@ -7,6 +7,7 @@ import { trpc } from "../utils/trpc";
 import "../styles/globals.css";
 import { Inter } from "@next/font/google";
 import Head from "next/head";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -23,6 +24,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
       <main className={inter.className}>
         <Component {...pageProps} />
+        <Toaster />
       </main>
     </SessionProvider>
   );
