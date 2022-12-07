@@ -10,10 +10,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Camp {
+  id             String          @id @default(cuid())
+  title          String
+  description    String
+  itineraryItems ItineraryItem[]
+  Room           Room[]
+  users          User[]
+}
+
+model ItineraryItem {
+  id              Int               @id @default(autoincrement())
+  title           String
+  description     String
+  date            DateTime
+  camp            Camp              @relation(fields: [campId], references: [id])
+  campId          String
+  itineraryOption ItineraryOption[]
+}
+
+model ItineraryOption {
+  id              Int           @id @default(autoincrement())
+  title           String
+  description     String
+  capacity        Int
+  users           User[]
+  itineraryItem   ItineraryItem @relation(fields: [itineraryItemId], references: [id])
+  itineraryItemId Int
+}
+
+model Room {
+  id       Int    @id @default(autoincrement())
+  name     String
+  capacity Int
+  camp     Camp   @relation(fields: [campId], references: [id])
+  campId   String
+  users    User[]
 }
 
 // Necessary for Next auth
@@ -44,13 +76,19 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id               String            @id @default(cuid())
+  name             String?
+  email            String?           @unique
+  emailVerified    DateTime?
+  image            String?
+  phone            String?           @unique
+  dob              DateTime?
+  gender           Gender?
+  accounts         Account[]
+  sessions         Session[]
+  camps            Camp[]
+  itineraryOptions ItineraryOption[]
+  rooms            Room[]
 }
 
 model VerificationToken {
@@ -59,4 +97,9 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum Gender {
+  male
+  female
 }
