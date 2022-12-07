@@ -6,8 +6,6 @@ const SignIn: NextPage = () => {
   const { query } = useRouter();
   const callbackUrl = query.callbackUrl as string | undefined;
 
-  console.log(callbackUrl);
-
   return (
     <div className="flex min-h-screen flex-col items-center p-4">
       <h1 className="mb-4 text-xl">Sign In</h1>
