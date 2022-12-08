@@ -10,13 +10,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Gender {
+  male
+  female
+}
+
+enum Role {
+  attendee
+  organiser
+}
+
 model Camp {
   id             String          @id @default(cuid())
   title          String
   description    String
   itineraryItems ItineraryItem[]
   Room           Room[]
-  users          User[]
+  members        Member[]
+}
+
+model Member {
+  id               Int               @id @default(autoincrement())
+  role             Role              @default(attendee)
+  camp             Camp              @relation(fields: [campId], references: [id])
+  campId           String
+  user             User              @relation(fields: [userId], references: [id])
+  userId           String
+  itineraryOptions ItineraryOption[]
+  Room             Room?             @relation(fields: [roomId], references: [id])
+  roomId           Int?
+
+  @@unique([campId, userId])
 }
 
 model ItineraryItem {
@@ -34,18 +58,18 @@ model ItineraryOption {
   title           String
   description     String
   capacity        Int
-  users           User[]
+  members         Member[]
   itineraryItem   ItineraryItem @relation(fields: [itineraryItemId], references: [id])
   itineraryItemId Int
 }
 
 model Room {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
   capacity Int
-  camp     Camp   @relation(fields: [campId], references: [id])
+  camp     Camp     @relation(fields: [campId], references: [id])
   campId   String
-  users    User[]
+  members  Member[]
 }
 
 // Necessary for Next auth
@@ -76,19 +100,17 @@ model Session {
 }
 
 model User {
-  id               String            @id @default(cuid())
-  name             String?
-  email            String?           @unique
-  emailVerified    DateTime?
-  image            String?
-  phone            String?
-  dob              DateTime?
-  gender           Gender?
-  accounts         Account[]
-  sessions         Session[]
-  camps            Camp[]
-  itineraryOptions ItineraryOption[]
-  rooms            Room[]
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  phone         String?
+  dob           DateTime?
+  gender        Gender?
+  accounts      Account[]
+  sessions      Session[]
+  CampMember    Member[]
 }
 
 model VerificationToken {
@@ -97,9 +119,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-enum Gender {
-  male
-  female
 }

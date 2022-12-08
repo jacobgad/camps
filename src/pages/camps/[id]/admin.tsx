@@ -1,6 +1,5 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
-import Link from "next/link";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -14,15 +13,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: {} };
 };
 
-const Camps: NextPage = () => {
+const CampAdmin: NextPage = () => {
   return (
-    <>
-      <main className="flex min-h-screen flex-col items-center">
-        <h1>Camps</h1>
-        <Link href="/camps">My Camps</Link>
-      </main>
-    </>
+    <main className="flex min-h-screen flex-col items-center">
+      <h1>ADMIN</h1>
+    </main>
   );
 };
 
-export default Camps;
+export default CampAdmin;
