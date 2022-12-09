@@ -70,6 +70,8 @@ model Room {
   camp     Camp     @relation(fields: [campId], references: [id])
   campId   String
   members  Member[]
+
+  @@unique([name, campId])
 }
 
 // Necessary for Next auth

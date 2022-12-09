@@ -9,23 +9,22 @@ type Props = {
 };
 
 const schema = z.object({
-  title: z.string().min(3),
-  description: z.string().min(3),
-  date: z.date(),
+  name: z.string().min(3),
+  capacity: z.number().min(1),
   campId: z.string().cuid(),
 });
 type Schema = z.infer<typeof schema>;
 
-export default function CreateItineraryItemForm({ campId }: Props) {
+export default function CreateRoomForm({ campId }: Props) {
   const { register, handleSubmit, reset } = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: { campId },
   });
 
   const utils = trpc.useContext();
-  const { mutate, isLoading } = trpc.itinerary.create.useMutation({
+  const { mutate, isLoading } = trpc.room.create.useMutation({
     onSuccess: () => {
-      utils.itinerary.get.invalidate();
+      utils.room.getAll.invalidate();
       reset({ campId });
     },
     onError: (error) => toast.error(error.message),
@@ -36,16 +35,11 @@ export default function CreateItineraryItemForm({ campId }: Props) {
       onSubmit={handleSubmit((data) => mutate(data))}
       className="grid gap-2"
     >
-      <input type="text" placeholder="title" {...register("title")} />
+      <input type="text" placeholder="name" {...register("name")} />
       <input
-        type="text"
-        placeholder="description"
-        {...register("description")}
-      />
-      <input
-        type="datetime-local"
-        placeholder="date"
-        {...register("date", { valueAsDate: true })}
+        type="number"
+        placeholder="capacity"
+        {...register("capacity", { valueAsNumber: true })}
       />
       <button disabled={isLoading}>Submit</button>
     </form>

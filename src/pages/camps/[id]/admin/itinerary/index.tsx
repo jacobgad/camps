@@ -2,6 +2,7 @@ import CreateItineraryItemForm from "components/itinerary/CreateItineraryItemFor
 import { format } from "date-fns";
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { trpc } from "utils/trpc";
 
@@ -17,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: {} };
 };
 
-const CampAdmin: NextPage = () => {
+const Page: NextPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const { data } = trpc.itinerary.get.useQuery({ id });
@@ -31,7 +32,7 @@ const CampAdmin: NextPage = () => {
       <ul className="mt-4 grid gap-2">
         {data?.map((item) => (
           <li key={item.id}>
-            <p>{format(item.date, "hh:MM a")}</p>
+            <p>{format(item.date, "h:mm a")}</p>
             <p>{item.title}</p>
             <p className="text-sm">{item.description}</p>
             <ul>
@@ -41,6 +42,12 @@ const CampAdmin: NextPage = () => {
                   <p>{option.description}</p>
                 </li>
               ))}
+              <Link
+                href={`/camps/${id}/admin/itinerary/${item.id}`}
+                className="border bg-white px-2"
+              >
+                Add Options
+              </Link>
             </ul>
           </li>
         ))}
@@ -49,4 +56,4 @@ const CampAdmin: NextPage = () => {
   );
 };
 
-export default CampAdmin;
+export default Page;
