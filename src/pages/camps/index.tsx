@@ -24,10 +24,12 @@ const Camps: NextPage = () => {
         <Link href="camps/new">New Camp</Link>
         <ul>
           {data?.map((camp) => (
-            <li key={camp.id} className="rounded border shadow">
-              <p>{camp.title}</p>
-              <p>{camp.description}</p>
-            </li>
+            <Link key={camp.id} href={`/camps/${camp.id}`}>
+              <li className="rounded border shadow">
+                <p>{camp.title}</p>
+                <p>{camp.description}</p>
+              </li>
+            </Link>
           ))}
         </ul>
       </main>

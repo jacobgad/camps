@@ -31,7 +31,8 @@ const Page: NextPage = () => {
         {data?.map((room) => (
           <li key={room.id} className="border p-1">
             <p className="flex justify-between">
-              {room.name} <span>Capacity: {room.capacity}</span>
+              <span>{room.name}</span>
+              <span>{room.capacity - room.members.length} open slots</span>
             </p>
             <ul>
               {room.members.map((member) => (
