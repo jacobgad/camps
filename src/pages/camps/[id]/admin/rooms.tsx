@@ -46,7 +46,7 @@ const Page: NextPage = () => {
                 </li>
               ))}
             </ul>
-            <JoinRoomButton roomId={room.id} />
+            <JoinRoomButton room={room} />
           </li>
         ))}
       </ul>

@@ -55,7 +55,6 @@ export const roomRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      //is user a member of this camp?
       const room = await ctx.prisma.room.findUnique({
         where: { id: input.roomId },
       });
