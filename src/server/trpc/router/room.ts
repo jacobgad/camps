@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { router, protectedProcedure } from "../trpc";
 
@@ -44,6 +45,40 @@ export const roomRouter = router({
             include: { user: { select: { name: true } } },
           },
         },
+      });
+    }),
+
+  join: protectedProcedure
+    .input(
+      z.object({
+        roomId: z.number(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      //is user a member of this camp?
+      const room = await ctx.prisma.room.findUnique({
+        where: { id: input.roomId },
+      });
+      if (!room)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Room does not exist",
+        });
+
+      const member = await ctx.prisma.member.findUnique({
+        where: {
+          campId_userId: { campId: room.campId, userId: ctx.session.user.id },
+        },
+      });
+      if (!member)
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not a member of this camp",
+        });
+
+      return ctx.prisma.member.update({
+        where: { id: member.id },
+        data: { roomId: input.roomId },
       });
     }),
 });
