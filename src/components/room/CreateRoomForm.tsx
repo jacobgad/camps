@@ -1,4 +1,7 @@
+import { HashtagIcon, PlusIcon } from "@heroicons/react/20/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Button from "@ui/Button";
+import Input from "@ui/Input";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { trpc } from "utils/trpc";
@@ -16,7 +19,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export default function CreateRoomForm({ campId }: Props) {
-  const { register, handleSubmit, reset } = useForm<Schema>({
+  const { register, handleSubmit, reset, formState } = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: { campId },
   });
@@ -35,13 +38,18 @@ export default function CreateRoomForm({ campId }: Props) {
       onSubmit={handleSubmit((data) => mutate(data))}
       className="grid gap-2"
     >
-      <input type="text" placeholder="name" {...register("name")} />
-      <input
+      <Input label="Room Name" type="text" {...register("name")} />
+      <Input
+        label="Capacity"
         type="number"
-        placeholder="capacity"
+        Icon={HashtagIcon}
         {...register("capacity", { valueAsNumber: true })}
       />
-      <button disabled={isLoading}>Submit</button>
+      <Button
+        text="Add new room"
+        Icon={PlusIcon}
+        disabled={isLoading || !formState.isValid}
+      />
     </form>
   );
 }
