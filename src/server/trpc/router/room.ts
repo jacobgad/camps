@@ -48,35 +48,79 @@ export const roomRouter = router({
       });
     }),
 
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string().min(3),
+        capacity: z.number().min(1),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const user = await ctx.prisma.member.findFirst({
+        where: { userId: ctx.session.user.id, role: "organiser" },
+      });
+      if (!user)
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Only organiser can update rooms",
+        });
+
+      return ctx.prisma.room.update({
+        where: { id: input.id },
+        data: input,
+      });
+    }),
+
   join: protectedProcedure
     .input(
       z.object({
         roomId: z.number(),
+        memberId: z.number(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       const room = await ctx.prisma.room.findUnique({
         where: { id: input.roomId },
+        include: { members: true },
       });
-      if (!room)
+
+      if (!room) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Room does not exist",
         });
+      }
 
-      const member = await ctx.prisma.member.findUnique({
+      if (room.capacity <= room.members.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Room is full",
+        });
+      }
+
+      const reqMember = await ctx.prisma.member.findUnique({
         where: {
           campId_userId: { campId: room.campId, userId: ctx.session.user.id },
         },
       });
-      if (!member)
+
+      if (!reqMember) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "You are not a member of this camp",
         });
+      }
+
+      if (reqMember.role !== "organiser" && reqMember.id !== input.memberId) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Only organisers can move other members",
+        });
+      }
 
       return ctx.prisma.member.update({
-        where: { id: member.id },
+        where: { id: input.memberId },
         data: { roomId: input.roomId },
       });
     }),
