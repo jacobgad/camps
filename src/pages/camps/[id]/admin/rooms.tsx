@@ -1,5 +1,5 @@
-import CreateRoomForm from "components/room/CreateRoomForm";
 import type { GetServerSideProps, NextPage } from "next";
+import CreateRoomForm from "components/room/CreateRoomForm";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { trpc } from "utils/trpc";
@@ -32,9 +32,9 @@ const Page: NextPage = () => {
       <h1 className="mb-6 text-3xl font-extrabold">Edit Rooms</h1>
 
       <CreateRoomForm campId={campId} />
-      <ul className="mt-4 grid gap-6">
+      <ul className="my-6 grid gap-6">
         {data?.map((room) => (
-          <li key={room.id} className="border-b pb-4">
+          <li key={room.id} className="border-t pt-4">
             <div className="mb-4">
               <UpdateRoomForm defaultValues={room} />
             </div>
@@ -57,7 +57,11 @@ const Page: NextPage = () => {
             {selectedMemberId &&
               room.capacity > room.members.length &&
               !room.members.map((m) => m.id).includes(selectedMemberId) && (
-                <JoinRoomButton room={room} memberId={selectedMemberId} />
+                <JoinRoomButton
+                  roomId={room.id}
+                  memberId={selectedMemberId}
+                  onSubmit={() => setSelectedMemberId(undefined)}
+                />
               )}
           </li>
         ))}

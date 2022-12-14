@@ -57,8 +57,30 @@ export const roomRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
+      const room = await ctx.prisma.room.findUnique({
+        where: { id: input.id },
+        include: { members: true },
+      });
+      if (!room) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Room does not exist",
+        });
+      }
+
+      if (room.members.length > input.capacity) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Cannot reduce capacity to bellow member count",
+        });
+      }
+
       const user = await ctx.prisma.member.findFirst({
-        where: { userId: ctx.session.user.id, role: "organiser" },
+        where: {
+          userId: ctx.session.user.id,
+          campId: room.campId,
+          role: "organiser",
+        },
       });
       if (!user)
         throw new TRPCError({

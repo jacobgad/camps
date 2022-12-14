@@ -4,10 +4,11 @@ type Ref = HTMLInputElement;
 type Props = {
   label: string;
   Icon?: React.ElementType;
+  error?: string;
 } & React.ComponentProps<"input">;
 
 export default forwardRef<Ref, Props>(function Input(
-  { label, Icon, ...props },
+  { label, Icon, error, ...props },
   ref
 ) {
   const id = useId();
@@ -32,6 +33,11 @@ export default forwardRef<Ref, Props>(function Input(
             Icon && "pl-10"
           }`}
         />
+        {error && (
+          <div className="absolute mt-1 rounded bg-red-400 px-2 py-1 text-sm">
+            {error}
+          </div>
+        )}
       </div>
     </div>
   );
