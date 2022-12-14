@@ -18,21 +18,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Page: NextPage = () => {
   const router = useRouter();
-  const id = router.query.id as string;
-  const { data } = trpc.camp.get.useQuery({ id });
+  const campId = router.query.id as string;
+  const { data } = trpc.member.get.useQuery({ campId });
 
   return (
-    <main className="flex min-h-screen flex-col items-center">
-      <h1>{data?.title}</h1>
-      <p>{data?.description}</p>
+    <main className="flex min-h-screen flex-col bg-indigo-600 px-4 py-8 text-indigo-50">
+      <div className="mb-6">
+        <h1 className="text-3xl font-extrabold">{data?.camp.title}</h1>
+        <p>{data?.camp.description}</p>
+      </div>
 
-      <hr className="divide-y-4 divide-black" />
-      {data?.members[0]?.role === "organiser" && (
-        <Link href={`/camps/${data?.id}/admin`}>Admin</Link>
-      )}
-      <hr />
-
-      <h2>{data?.members[0]?.user.name}</h2>
+      <div className="flex flex-col gap-4">
+        {data?.role === "organiser" && (
+          <Link
+            href={`/camps/${data?.id}/admin`}
+            className="flex place-content-center rounded-md border border-indigo-50 py-4"
+          >
+            Manage Camp
+          </Link>
+        )}
+      </div>
     </main>
   );
 };

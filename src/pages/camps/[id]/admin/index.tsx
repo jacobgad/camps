@@ -1,6 +1,11 @@
+import {
+  CalendarIcon,
+  KeyIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
+import { LinkButton } from "@ui/LinkButton";
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -21,12 +26,29 @@ const Page: NextPage = () => {
 
   return (
     <main className="flex min-h-screen flex-col p-4">
-      <h1>ADMIN</h1>
-      <h2>Timetable</h2>
-      <Link href={`/camps/${id}/admin/itinerary`}>Itinerary</Link>
-      <Link href={`/camps/${id}/admin/rooms`}>Rooms</Link>
-      <Link href={`/camps/${id}/admin/members`}>Members</Link>
-      <Link href={`/camps/${id}/admin/messages`}>Message</Link>
+      <h1 className="text-3xl font-extrabold">Manage Camp</h1>
+      <div className="mt-6 flex flex-col gap-3">
+        <LinkButton
+          text="Edit rooms"
+          href={`/camps/${id}/admin/rooms`}
+          Icon={KeyIcon}
+        />
+        <LinkButton
+          text="Edit teams"
+          href={`/camps/${id}/admin/teams`}
+          Icon={UserGroupIcon}
+        />
+        <LinkButton
+          text="Edit schedule"
+          href={`/camps/${id}/admin/itinerary`}
+          Icon={CalendarIcon}
+        />
+        <LinkButton
+          text="Edit rooms"
+          href={`/camps/${id}/admin/rooms`}
+          Icon={KeyIcon}
+        />
+      </div>
     </main>
   );
 };

@@ -36,12 +36,6 @@ export const campRouter = router({
     .query(({ input, ctx }) => {
       return ctx.prisma.camp.findUnique({
         where: { id: input.id },
-        include: {
-          members: {
-            where: { userId: ctx.session.user.id },
-            include: { user: true },
-          },
-        },
       });
     }),
 });
