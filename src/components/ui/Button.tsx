@@ -1,15 +1,56 @@
+import { cva } from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
+
 type Props = {
   text: string;
   Icon?: React.ElementType;
-} & React.ComponentProps<"button">;
+} & VariantProps<typeof buttonStyles> &
+  React.ComponentProps<"button">;
 
-export default function Button({ text, Icon, ...props }: Props) {
+const buttonStyles = cva(
+  [
+    "inline-flex items-center border border-transparent font-medium",
+    "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",
+  ],
+  {
+    variants: {
+      intent: {
+        primary:
+          "bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 disabled:bg-gray600",
+        secondary: "bg-indigo-50 text-indigo-700 hover:bg-indigo-100",
+        danger: "bg-red-100 text-red-700 hover:bg-red-200",
+      },
+      size: {
+        small: "rounded px-2.5 py-1.5 text-xs",
+        medium: "rounded-md px-4 py-2 text-sm",
+        large: "rounded-md px-6 py-3 text-base",
+      },
+      fullWidth: {
+        true: "w-full",
+      },
+    },
+    defaultVariants: {
+      intent: "primary",
+      size: "medium",
+    },
+  }
+);
+
+export default function Button({
+  text,
+  Icon,
+  intent,
+  size,
+  fullWidth,
+  className,
+  ...props
+}: Props) {
   return (
     <button
       {...props}
-      className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-indigo-200 disabled:shadow-none"
+      className={buttonStyles({ intent, size, fullWidth, className })}
     >
-      {Icon && <Icon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />}
+      {Icon && <Icon className="-ml-1 mr-3 h-5 w-5" aria-hidden="true" />}
       {text}
     </button>
   );

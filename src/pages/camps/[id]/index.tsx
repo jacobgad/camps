@@ -24,14 +24,14 @@ const Page: NextPage = () => {
   return (
     <main className="flex min-h-screen flex-col bg-indigo-600 px-4 py-8 text-indigo-50">
       <div className="mb-6">
-        <h1 className="text-3xl font-extrabold">{data?.camp.title}</h1>
-        <p>{data?.camp.description}</p>
+        <h1>{data?.camp.name}</h1>
+        <p>{data?.camp.organiser}</p>
       </div>
 
       <div className="flex flex-col gap-4">
         {data?.role === "organiser" && (
           <Link
-            href={`/camps/${data?.id}/admin`}
+            href={`/camps/${campId}/admin`}
             className="flex place-content-center rounded-md border border-indigo-50 py-4"
           >
             Manage Camp

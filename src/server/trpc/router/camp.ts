@@ -5,8 +5,10 @@ export const campRouter = router({
   create: protectedProcedure
     .input(
       z.object({
-        title: z.string().min(3),
-        description: z.string().min(3),
+        name: z.string().min(3),
+        organiser: z.string().min(3),
+        startDate: z.date(),
+        endDate: z.date(),
       })
     )
     .mutation(async ({ input, ctx }) => {

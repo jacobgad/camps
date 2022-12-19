@@ -22,8 +22,10 @@ enum Role {
 
 model Camp {
   id             String          @id @default(cuid())
-  title          String
-  description    String
+  name           String
+  organiser      String
+  startDate      DateTime
+  endDate        DateTime
   itineraryItems ItineraryItem[]
   Room           Room[]
   members        Member[]
