@@ -1,4 +1,5 @@
 import { forwardRef, useId } from "react";
+import { motion } from "framer-motion";
 
 type Ref = HTMLInputElement;
 type Props = {
@@ -35,9 +36,13 @@ export default forwardRef<Ref, Props>(function Input(
           } ${fullWidth && "w-full"}`}
         />
         {error !== undefined && (
-          <div className="absolute mt-1 rounded bg-red-400 px-2 py-1 text-sm">
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="absolute mt-1 rounded bg-red-700 px-2 py-1 text-sm text-red-50"
+          >
             {error}
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

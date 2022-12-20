@@ -40,6 +40,7 @@ const NewCamp: NextPage = () => {
 
   const { register, watch, formState, handleSubmit } = useForm<Schema>({
     resolver: zodResolver(schema),
+    mode: "onTouched",
   });
 
   return (
