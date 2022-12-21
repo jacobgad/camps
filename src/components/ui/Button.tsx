@@ -9,14 +9,14 @@ type Props = {
 
 const buttonStyles = cva(
   [
-    "inline-flex items-center border border-transparent font-medium",
+    "inline-flex items-center border border-transparent font-medium shadow-sm",
     "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",
   ],
   {
     variants: {
       intent: {
         primary:
-          "bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 disabled:bg-gray600",
+          "bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-gray600",
         secondary: "bg-indigo-50 text-indigo-700 hover:bg-indigo-100",
         danger: "bg-red-100 text-red-700 hover:bg-red-200",
       },

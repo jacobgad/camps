@@ -41,7 +41,7 @@ const Camps: NextPage = () => {
         <h2 className="mt-10 text-lg font-medium">My Camps</h2>
         <ul className="mt-2">
           {data?.map((camp, idx) => (
-            <li key={camp.id} className={idx > 1 ? "my-4 border-t-2 py-4" : ""}>
+            <li key={camp.id} className={idx > 0 ? "my-8 border-t-2 py-8" : ""}>
               <p className="text-base font-bold">{camp.name}</p>
               <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                 {`${format(camp.startDate, "d MMMM yyyy")} - ${format(
