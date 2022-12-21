@@ -78,8 +78,12 @@ const NewCamp: NextPage = () => {
         <Input
           label="End date"
           type="date"
-          disabled={!watch("startDate")}
-          min={watch("startDate") && format(watch("startDate"), "yyyy-MM-dd")}
+          disabled={!watch("startDate")?.getTime()}
+          min={
+            watch("startDate")?.getTime() > 0
+              ? format(watch("startDate"), "yyyy-MM-dd")
+              : undefined
+          }
           {...register("endDate", { valueAsDate: true })}
           error={formState.errors.endDate?.message}
         />
