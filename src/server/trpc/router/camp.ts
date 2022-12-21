@@ -26,6 +26,7 @@ export const campRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.camp.findMany({
       where: { members: { some: { userId: ctx.session.user.id } } },
+      include: { members: { where: { userId: ctx.session.user.id } } },
     });
   }),
 
