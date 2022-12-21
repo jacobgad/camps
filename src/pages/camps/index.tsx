@@ -31,11 +31,6 @@ const Camps: NextPage = () => {
     [data]
   );
 
-  const attendeeCamps = useMemo(
-    () => data?.filter((camp) => camp.members.at(0)?.role === "attendee"),
-    [data]
-  );
-
   return (
     <>
       <main className="flex min-h-screen flex-col px-4 py-8">
@@ -50,8 +45,8 @@ const Camps: NextPage = () => {
         <p className="text-sm font-medium text-gray-500">
           Camps that you have registered to attend
         </p>
-        <ul className="mt-4">
-          {attendeeCamps?.map((camp) => (
+        <ul className="mt-4 grid gap-6">
+          {data?.map((camp) => (
             <li key={camp.id} className="rounded bg-white p-4 shadow-sm">
               <p className="text-base font-bold">{camp.name}</p>
               <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
@@ -84,7 +79,7 @@ const Camps: NextPage = () => {
             fullWidth
           />
         </Link>
-        <ul className="mt-6 flex flex-col gap-6">
+        <ul className="mt-6 grid gap-6">
           {organiserCamps?.map((camp) => (
             <li key={camp.id} className="rounded bg-white p-4 shadow-sm">
               <p className="text-base font-bold">{camp.name}</p>
