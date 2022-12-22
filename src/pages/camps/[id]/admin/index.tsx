@@ -6,21 +6,15 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import Button from "@ui/Button";
-import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
 import { trpc } from "utils/trpc";
 import Link from "next/link";
+import { isAuthed } from "utils/auth";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (!session)
-    return {
-      redirect: {
-        destination: `/signin?callbackUrl=${context.resolvedUrl}`,
-        permanent: false,
-      },
-    };
+  const redirect = await isAuthed(context);
+  if (redirect) return redirect;
   return { props: {} };
 };
 

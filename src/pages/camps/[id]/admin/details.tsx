@@ -1,9 +1,9 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { trpc } from "../../utils/trpc";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
-import { isAuthed } from "utils/auth";
+import { trpc } from "utils/trpc";
 import CampDetailsForm from "components/camp/CampDetailsForm";
+import { isAuthed } from "utils/auth";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -13,6 +13,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const NewCamp: NextPage = () => {
   const router = useRouter();
+  const campId = router.query.id as string;
+
+  const { data } = trpc.camp.get.useQuery(
+    { id: campId },
+    {
+      onError: (error) => {
+        toast.error(error.message);
+        router.back();
+      },
+    }
+  );
+
   const { mutate, isLoading } = trpc.camp.create.useMutation({
     onError: (error) => toast.error(error.message),
     onSuccess: (data) => {
@@ -23,8 +35,15 @@ const NewCamp: NextPage = () => {
 
   return (
     <main className="flex min-h-screen flex-col px-4 py-8">
-      <h1>New Camp</h1>
-      <CampDetailsForm disabled={isLoading} onSubmit={mutate} />
+      <h1>Details</h1>
+      {data && (
+        <CampDetailsForm
+          defaultValues={data}
+          onSubmit={mutate}
+          disabled={isLoading}
+          buttonText="Save changes"
+        />
+      )}
     </main>
   );
 };

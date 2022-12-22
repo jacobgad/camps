@@ -1,22 +1,16 @@
 import type { GetServerSideProps, NextPage } from "next";
 import CreateRoomForm from "components/room/CreateRoomForm";
-import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { trpc } from "utils/trpc";
 import { UserIcon } from "@heroicons/react/24/outline";
 import JoinRoomButton from "components/room/JoinRoomButton";
 import { useState } from "react";
 import UpdateRoomForm from "components/room/UpdateRoomForm";
+import { isAuthed } from "utils/auth";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (!session)
-    return {
-      redirect: {
-        destination: `/signin?callbackUrl=${context.resolvedUrl}`,
-        permanent: false,
-      },
-    };
+  const redirect = await isAuthed(context);
+  if (redirect) return redirect;
   return { props: {} };
 };
 
