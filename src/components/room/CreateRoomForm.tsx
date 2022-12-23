@@ -26,9 +26,10 @@ export default function CreateRoomForm({ campId }: Props) {
 
   const utils = trpc.useContext();
   const { mutate, isLoading } = trpc.room.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
+      toast.success(`${data.name} Created`);
       utils.room.getAll.invalidate();
-      reset({ campId });
+      reset();
     },
     onError: (error) => toast.error(error.message),
   });
@@ -48,7 +49,8 @@ export default function CreateRoomForm({ campId }: Props) {
       <Button
         text="Add new room"
         Icon={PlusIcon}
-        disabled={isLoading || !formState.isValid}
+        disabled={!formState.isValid}
+        isLoading={isLoading}
       />
     </form>
   );

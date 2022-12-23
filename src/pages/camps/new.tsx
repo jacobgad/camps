@@ -24,7 +24,7 @@ const NewCamp: NextPage = () => {
   return (
     <main className="flex flex-col px-4 py-8">
       <h1>New Camp</h1>
-      <CampDetailsForm disabled={isLoading} onSubmit={mutate} />
+      <CampDetailsForm isLoading={isLoading} onSubmit={mutate} />
     </main>
   );
 };

@@ -8,7 +8,7 @@ import { z } from "zod";
 
 type Props = {
   onSubmit: (data: Schema) => void;
-  disabled: boolean;
+  isLoading: boolean;
   defaultValues?: Partial<Schema>;
   buttonText?: string;
 };
@@ -81,7 +81,8 @@ export default function CampDetailsForm(props: Props) {
       <Button
         text={props.buttonText ?? "Submit"}
         type="submit"
-        disabled={props.disabled || !formState.isValid}
+        disabled={!formState.isValid}
+        isLoading={props.isLoading}
         fullWidth
         className="mt-2 justify-center"
       />

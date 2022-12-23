@@ -61,7 +61,11 @@ export default function UpdateRoomForm({ defaultValues }: Props) {
         {...register("capacity", { valueAsNumber: true })}
       />
       {formState.isDirty && (
-        <Button text="Update room" disabled={isLoading || !formState.isValid} />
+        <Button
+          text="Update room"
+          disabled={!formState.isValid}
+          isLoading={isLoading}
+        />
       )}
     </form>
   );

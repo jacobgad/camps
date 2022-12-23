@@ -40,7 +40,7 @@ const NewCamp: NextPage = () => {
         <CampDetailsForm
           defaultValues={data}
           onSubmit={mutate}
-          disabled={isLoading}
+          isLoading={isLoading}
           buttonText="Save changes"
         />
       )}
