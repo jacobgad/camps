@@ -7,10 +7,11 @@ type Props = {
   Icon?: React.ElementType;
   error?: string;
   fullWidth?: boolean;
+  helperText?: string;
 } & React.ComponentProps<"input">;
 
 export default forwardRef<Ref, Props>(function Input(
-  { label, Icon, error, fullWidth, ...props },
+  { label, Icon, error, fullWidth, helperText, ...props },
   ref
 ) {
   const id = useId();
@@ -19,6 +20,9 @@ export default forwardRef<Ref, Props>(function Input(
     <div className={fullWidth ? "w-full" : ""}>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
+        {helperText && (
+          <span className="font-normal text-gray-500"> ({helperText})</span>
+        )}
       </label>
       <div className="relative mt-1 rounded-md shadow-sm">
         {Icon && (

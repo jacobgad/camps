@@ -3,7 +3,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
 export const itineraryRouter = router({
-  get: protectedProcedure
+  getAll: protectedProcedure
     .input(
       z.object({
         id: z.string().cuid(),
@@ -20,10 +20,11 @@ export const itineraryRouter = router({
   create: protectedProcedure
     .input(
       z.object({
-        title: z.string().min(3),
-        description: z.string().min(3),
-        date: z.date(),
         campId: z.string().cuid(),
+        name: z.string().min(3),
+        description: z.string().optional(),
+        location: z.string().optional(),
+        date: z.date(),
       })
     )
     .mutation(async ({ input, ctx }) => {

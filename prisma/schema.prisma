@@ -47,18 +47,22 @@ model Member {
 
 model ItineraryItem {
   id          Int               @id @default(autoincrement())
-  title       String
-  description String
+  name        String
+  description String?
+  location    String?
   date        DateTime
   camp        Camp              @relation(fields: [campId], references: [id])
   campId      String
   options     ItineraryOption[]
+
+  @@unique([campId, date])
 }
 
 model ItineraryOption {
   id              Int           @id @default(autoincrement())
-  title           String
-  description     String
+  name            String
+  description     String?
+  location        String?
   capacity        Int
   members         Member[]
   itineraryItem   ItineraryItem @relation(fields: [itineraryItemId], references: [id])
