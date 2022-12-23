@@ -146,4 +146,36 @@ export const roomRouter = router({
         data: { roomId: input.roomId },
       });
     }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.number().int() }))
+    .mutation(async ({ input, ctx }) => {
+      const room = await ctx.prisma.room.findUnique({
+        where: { id: input.id },
+        include: {
+          members: true,
+          camp: {
+            include: { members: { where: { userId: ctx.session.user.id } } },
+          },
+        },
+      });
+
+      if (room?.camp.members.at(0)?.role !== "organiser") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not an organiser of this camp",
+        });
+      }
+
+      if (room.members.length > 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Room must be empty to delete",
+        });
+      }
+
+      return ctx.prisma.room.delete({
+        where: { id: input.id },
+      });
+    }),
 });

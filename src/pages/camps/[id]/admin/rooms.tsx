@@ -2,11 +2,12 @@ import type { GetServerSideProps, NextPage } from "next";
 import CreateRoomForm from "components/room/CreateRoomForm";
 import { useRouter } from "next/router";
 import { trpc } from "utils/trpc";
-import { UserIcon } from "@heroicons/react/24/outline";
 import JoinRoomButton from "components/room/JoinRoomButton";
 import { useState } from "react";
 import UpdateRoomForm from "components/room/UpdateRoomForm";
 import { isAuthed } from "utils/auth";
+import MemberListItem from "components/room/MemberListItem";
+import DeleteRoomButton from "components/room/DeleteRoomButton";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -48,6 +49,9 @@ const Page: NextPage = () => {
                 </li>
               ))}
             </ul>
+            {room.members.length < 1 && !selectedMemberId && (
+              <DeleteRoomButton roomId={room.id} />
+            )}
             {selectedMemberId &&
               room.capacity > room.members.length &&
               !room.members.map((m) => m.id).includes(selectedMemberId) && (
@@ -63,32 +67,5 @@ const Page: NextPage = () => {
     </main>
   );
 };
-
-type UserListItemProps = {
-  text: string | null;
-  selected: boolean;
-  onClick: () => void;
-};
-
-function MemberListItem({ text, selected, onClick }: UserListItemProps) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex w-full items-center gap-2 rounded-lg border border-gray-300 py-2 px-4 ${
-        selected ? "bg-indigo-500 text-white" : "bg-white"
-      }`}
-    >
-      <UserIcon
-        className={`h-4 stroke-2 ${
-          selected ? "stroke-white" : "stroke-indigo-500"
-        }`}
-      />
-      <span className="flex-grow text-left text-sm">{text}</span>
-      <span className={`text-sm ${!selected && "text-indigo-500"}`}>
-        {selected ? "Cancel" : "Reallocate"}
-      </span>
-    </button>
-  );
-}
 
 export default Page;

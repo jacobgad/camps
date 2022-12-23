@@ -51,6 +51,7 @@ export default function CreateRoomForm({ campId }: Props) {
         Icon={PlusIcon}
         disabled={!formState.isValid}
         isLoading={isLoading}
+        className="justify-center"
       />
     </form>
   );

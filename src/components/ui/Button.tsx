@@ -17,9 +17,11 @@ const buttonStyles = cva(
     variants: {
       intent: {
         primary:
-          "bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-indigo-200",
-        secondary: "bg-indigo-50 text-indigo-700 hover:bg-indigo-100",
-        danger: "bg-red-100 text-red-700 hover:bg-red-200",
+          "bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-indigo-200 disabled:hover:bg-indigo-200",
+        secondary:
+          "bg-indigo-50 text-indigo-700 hover:bg-indigo-100 disabled:hover:bg-indigo-50 disabled:text-indigo-300",
+        danger:
+          "bg-red-50 text-red-700 hover:bg-red-200 disabled:text-red-300 disabled:hover:bg-red-50",
       },
       size: {
         small: "rounded px-2.5 py-1.5 text-xs",
