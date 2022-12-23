@@ -3,11 +3,21 @@
 @tailwind utilities;
 
 html {
+  height: fill-available;
+  height: -webkit-fill-available;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  @apply bg-gray-50;
+  @apply h-full bg-gray-50;
+}
+
+#__next {
+  @apply h-full;
+}
+
+main {
+  @apply h-full;
 }
 
 h1 {

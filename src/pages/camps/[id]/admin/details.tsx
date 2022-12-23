@@ -34,7 +34,7 @@ const NewCamp: NextPage = () => {
   });
 
   return (
-    <main className="flex min-h-screen flex-col px-4 py-8">
+    <main className="flex flex-col px-4 py-8">
       <h1>Details</h1>
       {data && (
         <CampDetailsForm
