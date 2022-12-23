@@ -29,7 +29,7 @@ const Page: NextPage = () => {
         </p>
       </header>
 
-      <main className="flex min-h-screen flex-col px-4 py-8">
+      <main className="flex flex-col px-4 py-8">
         <h2 className="text-lg font-medium text-gray-900">Registration</h2>
         <p className="mt-1 text-sm font-normal text-gray-500">
           Your information is only accessible to the event organisers, and will

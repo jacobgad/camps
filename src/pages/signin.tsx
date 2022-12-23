@@ -8,7 +8,7 @@ const SignIn: NextPage = () => {
   const callbackUrl = (router.query.callbackUrl as string | undefined) ?? "/";
 
   return (
-    <div className="flex min-h-screen flex-col items-center p-4">
+    <div className="flex flex-col items-center p-4">
       <h1 className="mb-4 text-xl">Sign In</h1>
       <div className="grid w-full gap-2">
         <button

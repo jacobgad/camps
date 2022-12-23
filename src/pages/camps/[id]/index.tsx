@@ -16,7 +16,7 @@ const Page: NextPage = () => {
   const { data } = trpc.member.get.useQuery({ campId });
 
   return (
-    <main className="flex min-h-screen flex-col bg-indigo-600 px-4 py-8 text-indigo-50">
+    <main className="flex flex-col bg-indigo-600 px-4 py-8 text-indigo-50">
       <div className="mb-6">
         <h1>{data?.camp.name}</h1>
         <p>{data?.camp.organiser}</p>

@@ -22,7 +22,7 @@ const Page: NextPage = () => {
   const [selectedMemberId, setSelectedMemberId] = useState<number>();
 
   return (
-    <main className="flex min-h-screen flex-col px-4 py-8">
+    <main className="flex flex-col px-4 py-8">
       <h1 className="mb-6 text-3xl font-extrabold">Edit Rooms</h1>
 
       <CreateRoomForm campId={campId} />

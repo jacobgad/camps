@@ -18,7 +18,7 @@ const Page: NextPage = () => {
   const { data } = trpc.itinerary.get.useQuery({ id });
 
   return (
-    <main className="flex min-h-screen flex-col p-4">
+    <main className="flex flex-col p-4">
       <h1>ADMIN</h1>
       <h2>Timetable</h2>
       <CreateItineraryItemForm campId={id} />

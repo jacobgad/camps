@@ -27,7 +27,7 @@ const Camps: NextPage = () => {
 
   return (
     <>
-      <main className="flex min-h-screen flex-col px-4 py-8">
+      <main className="flex flex-col px-4 py-8">
         <h1 className="flex flex-col text-center uppercase text-indigo-500">
           <span className="mb-1 text-sm font-medium tracking-wide">
             Camp Registration

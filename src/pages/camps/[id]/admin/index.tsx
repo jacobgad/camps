@@ -30,7 +30,7 @@ const Page: NextPage = () => {
   );
 
   return (
-    <main className="flex min-h-screen flex-col px-4 py-8">
+    <main className="flex flex-col px-4 py-8">
       <h1>Manage Camp</h1>
       <h2 className="mt-2 text-base font-bold text-gray-500">{data?.name}</h2>
       <div className="mt-6 flex flex-col gap-2">
