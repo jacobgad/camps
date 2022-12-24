@@ -28,15 +28,13 @@ export const itineraryRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const member = await ctx.prisma.member.findUnique({
+      const organiser = await ctx.prisma.user.findFirst({
         where: {
-          campId_userId: {
-            campId: input.campId,
-            userId: ctx.session.user.id,
-          },
+          id: ctx.session.user.id,
+          camps: { some: { id: input.campId } },
         },
       });
-      if (member?.role !== "organiser") {
+      if (!organiser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "You are not an organiser of this camp",

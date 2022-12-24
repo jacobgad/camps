@@ -1,5 +1,4 @@
 import type { GetServerSideProps, NextPage } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { isAuthed } from "utils/auth";
 import { trpc } from "utils/trpc";
@@ -20,17 +19,6 @@ const Page: NextPage = () => {
       <div className="mb-6">
         <h1>{data?.camp.name}</h1>
         <p>{data?.camp.organiser}</p>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        {data?.role === "organiser" && (
-          <Link
-            href={`/camps/${campId}/admin`}
-            className="flex place-content-center rounded-md border border-indigo-50 py-4"
-          >
-            Manage Camp
-          </Link>
-        )}
       </div>
     </main>
   );

@@ -15,11 +15,6 @@ enum Gender {
   female
 }
 
-enum Role {
-  attendee
-  organiser
-}
-
 model Camp {
   id             String          @id @default(cuid())
   name           String
@@ -29,18 +24,18 @@ model Camp {
   itineraryItems ItineraryItem[]
   Room           Room[]
   members        Member[]
+  organisers     User[]
 }
 
 model Member {
   id               Int               @id @default(autoincrement())
-  role             Role              @default(attendee)
   camp             Camp              @relation(fields: [campId], references: [id])
   campId           String
   user             User              @relation(fields: [userId], references: [id])
   userId           String
   itineraryOptions ItineraryOption[]
-  Room             Room?             @relation(fields: [roomId], references: [id])
-  roomId           Int?
+  Room             Room              @relation(fields: [roomId], references: [id])
+  roomId           Int
 
   @@unique([campId, userId])
 }
@@ -119,6 +114,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   CampMember    Member[]
+  camps         Camp[]
 }
 
 model VerificationToken {

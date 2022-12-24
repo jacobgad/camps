@@ -7,7 +7,6 @@ import Button from "@ui/Button";
 import { format } from "date-fns";
 import type { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
-import { useMemo } from "react";
 import { isAuthed } from "utils/auth";
 import { trpc } from "../../utils/trpc";
 
@@ -19,11 +18,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Camps: NextPage = () => {
   const { data } = trpc.camp.getAll.useQuery();
-
-  const organiserCamps = useMemo(
-    () => data?.filter((camp) => camp.members.at(0)?.role === "organiser"),
-    [data]
-  );
 
   return (
     <>
@@ -40,7 +34,7 @@ const Camps: NextPage = () => {
           Camps that you have registered to attend
         </p>
         <ul className="mt-4 grid gap-6">
-          {data?.map((camp) => (
+          {data?.attending.map((camp) => (
             <li key={camp.id} className="rounded bg-white p-4 shadow-sm">
               <p className="text-base font-bold">{camp.name}</p>
               <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
@@ -74,7 +68,7 @@ const Camps: NextPage = () => {
           />
         </Link>
         <ul className="mt-6 grid gap-6">
-          {organiserCamps?.map((camp) => (
+          {data?.organising.map((camp) => (
             <li key={camp.id} className="rounded bg-white p-4 shadow-sm">
               <p className="text-base font-bold">{camp.name}</p>
               <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">

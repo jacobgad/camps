@@ -75,11 +75,10 @@ export const roomRouter = router({
         });
       }
 
-      const user = await ctx.prisma.member.findFirst({
+      const user = await ctx.prisma.user.findFirst({
         where: {
-          userId: ctx.session.user.id,
-          campId: room.campId,
-          role: "organiser",
+          id: ctx.session.user.id,
+          camps: { some: { id: room.campId } },
         },
       });
       if (!user)
@@ -125,6 +124,9 @@ export const roomRouter = router({
         where: {
           campId_userId: { campId: room.campId, userId: ctx.session.user.id },
         },
+        include: {
+          user: { include: { camps: { where: { id: room.campId } } } },
+        },
       });
 
       if (!reqMember) {
@@ -134,7 +136,7 @@ export const roomRouter = router({
         });
       }
 
-      if (reqMember.role !== "organiser" && reqMember.id !== input.memberId) {
+      if (reqMember.user.camps.length < 1 && reqMember.id !== input.memberId) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Only organisers can move other members",
@@ -155,12 +157,12 @@ export const roomRouter = router({
         include: {
           members: true,
           camp: {
-            include: { members: { where: { userId: ctx.session.user.id } } },
+            include: { organisers: { where: { id: ctx.session.user.id } } },
           },
         },
       });
 
-      if (room?.camp.members.at(0)?.role !== "organiser") {
+      if (!room?.camp.organisers.length) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "You are not an organiser of this camp",

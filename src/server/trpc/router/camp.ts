@@ -12,22 +12,28 @@ export const campRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const camp = await ctx.prisma.camp.create({ data: input });
-      await ctx.prisma.member.create({
+      return ctx.prisma.camp.create({
         data: {
-          campId: camp.id,
-          userId: ctx.session.user.id,
-          role: "organiser",
+          ...input,
+          organisers: { connect: { id: ctx.session.user.id } },
         },
       });
-      return camp;
     }),
 
-  getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.camp.findMany({
+  getAll: protectedProcedure.query(async ({ ctx }) => {
+    const attending = await ctx.prisma.camp.findMany({
       where: { members: { some: { userId: ctx.session.user.id } } },
       include: { members: { where: { userId: ctx.session.user.id } } },
+      orderBy: { startDate: "asc" },
     });
+
+    const organising = await ctx.prisma.camp.findMany({
+      where: { organisers: { some: { id: ctx.session.user.id } } },
+      include: { organisers: { where: { id: ctx.session.user.id } } },
+      orderBy: { startDate: "asc" },
+    });
+
+    return { attending, organising };
   }),
 
   get: protectedProcedure
