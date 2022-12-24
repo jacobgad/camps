@@ -25,10 +25,10 @@ const NewCamp: NextPage = () => {
     }
   );
 
-  const { mutate, isLoading } = trpc.camp.create.useMutation({
+  const { mutate, isLoading } = trpc.camp.update.useMutation({
     onError: (error) => toast.error(error.message),
     onSuccess: (data) => {
-      toast.success(`Camp ${data.name} created`);
+      toast.success(`Camp ${data.name} updated`);
       router.push(`/camps/${data.id}/admin`);
     },
   });
@@ -39,7 +39,7 @@ const NewCamp: NextPage = () => {
       {data && (
         <CampDetailsForm
           defaultValues={data}
-          onSubmit={mutate}
+          onSubmit={(data) => mutate({ ...data, id: campId })}
           isLoading={isLoading}
           buttonText="Save changes"
         />

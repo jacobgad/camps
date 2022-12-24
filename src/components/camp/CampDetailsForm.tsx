@@ -4,6 +4,7 @@ import Button from "@ui/Button";
 import Input from "@ui/Input";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
+import { dateToInputDate } from "utils/form";
 import { z } from "zod";
 
 type Props = {
@@ -25,8 +26,16 @@ export default function CampDetailsForm(props: Props) {
   const { register, watch, formState, handleSubmit } = useForm<Schema>({
     resolver: zodResolver(schema),
     mode: "onTouched",
-    defaultValues: props.defaultValues,
+    defaultValues: {
+      ...props.defaultValues,
+      startDate: dateToInputDate(props.defaultValues?.startDate),
+      endDate: dateToInputDate(props.defaultValues?.endDate),
+    },
   });
+
+  const safeStartDate = watch("startDate")
+    ? new Date(watch("startDate"))
+    : undefined;
 
   return (
     <form
@@ -59,21 +68,12 @@ export default function CampDetailsForm(props: Props) {
           type="date"
           {...register("startDate", { valueAsDate: true })}
           error={formState.errors.startDate?.message}
-          // defaultValue={
-          //   props.defaultValues?.startDate
-          //     ? format(props.defaultValues.startDate, "yyyy-MM-dd")
-          //     : undefined
-          // }
         />
         <Input
           label="End date"
           type="date"
-          disabled={!watch("startDate")?.getTime()}
-          min={
-            watch("startDate")?.getTime() > 0
-              ? format(watch("startDate"), "yyyy-MM-dd")
-              : undefined
-          }
+          disabled={!safeStartDate?.getTime()}
+          min={safeStartDate ? format(safeStartDate, "yyyy-MM-dd") : undefined}
           {...register("endDate", { valueAsDate: true })}
           error={formState.errors.endDate?.message}
         />
