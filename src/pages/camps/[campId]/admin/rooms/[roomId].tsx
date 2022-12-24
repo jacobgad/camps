@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { isAuthed } from "utils/auth";
 import { toast } from "react-hot-toast";
 import { trpc } from "utils/trpc";
+import DeleteRoomButton from "components/room/DeleteRoomButton";
+import MemberCard from "components/room/MemberCard";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -44,6 +46,24 @@ const Page: NextPage = () => {
           />
         </div>
       )}
+
+      <div className="mt-4">
+        {data && (
+          <DeleteRoomButton
+            roomId={data.id}
+            disabled={data.members.length > 0}
+          />
+        )}
+      </div>
+
+      <h2 className="mt-10 text-lg font-medium">Room members</h2>
+      <ul className="mt-4 space-y-2">
+        {data?.members.map((member) => (
+          <li key={member.id}>
+            <MemberCard member={member} />
+          </li>
+        ))}
+      </ul>
     </main>
   );
 };

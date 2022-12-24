@@ -1,3 +1,4 @@
+import type { ButtonProps } from "@ui/Button";
 import { TrashIcon } from "@heroicons/react/20/solid";
 import Button from "@ui/Button";
 import { toast } from "react-hot-toast";
@@ -5,9 +6,10 @@ import { trpc } from "utils/trpc";
 
 type Props = {
   roomId: number;
+  disabled: ButtonProps["disabled"];
 };
 
-export default function DeleteRoomButton({ roomId }: Props) {
+export default function DeleteRoomButton({ roomId, disabled }: Props) {
   const utils = trpc.useContext();
   const { mutate, isLoading } = trpc.room.delete.useMutation({
     onSuccess: (data) => {
@@ -26,6 +28,7 @@ export default function DeleteRoomButton({ roomId }: Props) {
       className="justify-center"
       onClick={() => mutate({ id: roomId })}
       isLoading={isLoading}
+      disabled={disabled}
     />
   );
 }

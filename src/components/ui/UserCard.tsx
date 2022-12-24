@@ -1,16 +1,12 @@
 import { UserIcon } from "@heroicons/react/24/outline";
 
-type UserListItemProps = {
+type UserCardProps = {
   text: string | null;
-  selected: boolean;
-  onClick: () => void;
+  selected?: boolean;
+  onClick?: () => void;
 };
 
-export default function MemberListItem({
-  text,
-  selected,
-  onClick,
-}: UserListItemProps) {
+export default function UserCard({ text, selected, onClick }: UserCardProps) {
   return (
     <button
       onClick={onClick}
