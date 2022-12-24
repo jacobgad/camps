@@ -13,7 +13,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Page: NextPage = () => {
   const router = useRouter();
-  const campId = router.query.id as string;
+  const campId = router.query.campId as string;
 
   const utils = trpc.useContext();
   const { mutate, isLoading } = trpc.itinerary.create.useMutation({

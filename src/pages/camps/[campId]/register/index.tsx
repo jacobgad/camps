@@ -12,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Page: NextPage = () => {
   const router = useRouter();
-  const campId = router.query.id as string;
+  const campId = router.query.campId as string;
   const { data } = trpc.member.get.useQuery(
     { campId },
     {

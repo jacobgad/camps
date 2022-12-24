@@ -2,7 +2,7 @@ import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
-type Props = {
+export type ButtonProps = {
   text: string;
   Icon?: React.ElementType;
 } & VariantProps<typeof buttonStyles> &
@@ -51,7 +51,7 @@ export default function Button({
   isLoading,
   className,
   ...props
-}: Props) {
+}: ButtonProps) {
   return (
     <button
       {...props}
