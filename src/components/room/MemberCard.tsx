@@ -71,7 +71,7 @@ function ReallocateRoomForm(props: ReallocateRoomFormProps) {
   return (
     <div className="flex h-full flex-col">
       <RadioGroup<typeof props.rooms[number]>
-        options={props.rooms}
+        options={props.rooms.filter((room) => room.id !== props.currentRoomId)}
         value={props.rooms.find((room) => room.id === roomId)}
         onChange={(room) => setRoomId(room.id)}
         formatOption={(room) => ({
