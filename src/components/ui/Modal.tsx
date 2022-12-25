@@ -15,8 +15,8 @@ export default function Modal(props: DialogProps) {
       <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
 
       <div className="fixed inset-0 py-10 px-4">
-        <Dialog.Panel className="mx-auto h-full max-w-sm rounded-lg bg-gray-50 p-6 shadow-xl">
-          <div className="flex justify-between">
+        <Dialog.Panel className="mx-auto flex h-full max-w-sm flex-col rounded-lg bg-gray-50 p-6 shadow-xl">
+          <div className="mb-4 flex justify-between">
             <Dialog.Title className="text-lg font-medium">
               {props.title}
             </Dialog.Title>
@@ -29,7 +29,7 @@ export default function Modal(props: DialogProps) {
             <Dialog.Description>{props.description}</Dialog.Description>
           )}
 
-          {props.children}
+          <div className="flex-grow">{props.children}</div>
         </Dialog.Panel>
       </div>
     </Dialog>

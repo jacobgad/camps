@@ -20,6 +20,7 @@ export const roomRouter = router({
     .query(({ input, ctx }) => {
       return ctx.prisma.room.findMany({
         where: { campId: input.campId },
+        orderBy: { name: "asc" },
         include: {
           members: {
             include: {
@@ -146,6 +147,7 @@ export const roomRouter = router({
       return ctx.prisma.member.update({
         where: { id: input.memberId },
         data: { roomId: input.roomId },
+        include: { room: true },
       });
     }),
 
