@@ -32,7 +32,9 @@ const Page: NextPage = () => {
   return (
     <main className="flex flex-col px-4 py-8">
       <h1>Manage Camp</h1>
-      <h2 className="mt-2 text-base font-bold text-gray-500">{data?.name}</h2>
+      <h2 className="mt-2 h-6 text-base font-bold text-gray-500">
+        {data?.name}
+      </h2>
       <div className="mt-6 flex flex-col gap-2">
         <Link href={`/camps/${id}/admin/details`}>
           <Button
