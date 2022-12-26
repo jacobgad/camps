@@ -5,7 +5,7 @@ import { isAuthed } from "utils/auth";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import Button from "@ui/Button";
-import Card from "@ui/Card";
+import ItemCard from "@ui/cards/ItemCard";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -35,12 +35,10 @@ const Page: NextPage = () => {
         {data?.map((room) => (
           <li key={room.id}>
             <Link href={`/camps/${campId}/admin/rooms/${room.id}`}>
-              <Card>
-                <p className="text-sm font-semibold">{room.name}</p>
-                <p className="text-sm font-normal text-gray-500">
-                  Capacity {room.members.length}/{room.capacity}
-                </p>
-              </Card>
+              <ItemCard
+                label={room.name}
+                description={`Capacity ${room.members.length}/${room.capacity}`}
+              />
             </Link>
           </li>
         ))}

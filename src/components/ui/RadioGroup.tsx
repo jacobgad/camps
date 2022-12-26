@@ -1,6 +1,6 @@
 import { RadioGroup as RG } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import Card from "./Card";
+import Card from "./cards/Card";
 
 type Option = {
   id: number | string;

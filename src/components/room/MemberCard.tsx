@@ -2,7 +2,7 @@ import type { Member, Room, User } from "@prisma/client";
 import Button from "@ui/Button";
 import Modal from "@ui/Modal";
 import { RadioGroup } from "@ui/RadioGroup";
-import UserCard from "@ui/UserCard";
+import UserCard from "@ui/cards/UserCard";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
