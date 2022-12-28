@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { groupItinerary } from "utils/itinerary";
 import { format } from "date-fns";
 import ItemCard from "@ui/cards/ItemCard";
+import { toast } from "react-hot-toast";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -19,7 +20,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Page: NextPage = () => {
   const router = useRouter();
   const campId = router.query.campId as string;
-  const { data } = trpc.itinerary.getAll.useQuery({ id: campId });
+  const { data } = trpc.itinerary.getAll.useQuery(
+    { campId },
+    {
+      onError: (error) => toast.error(error.message),
+    }
+  );
 
   const groupedItinerary = useMemo(() => groupItinerary(data ?? []), [data]);
 

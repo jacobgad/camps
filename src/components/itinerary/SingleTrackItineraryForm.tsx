@@ -1,4 +1,5 @@
-import { UserIcon, MapPinIcon, TrashIcon } from "@heroicons/react/20/solid";
+import type { ButtonProps } from "@ui/Button";
+import { UserIcon, MapPinIcon } from "@heroicons/react/20/solid";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@ui/Button";
@@ -7,15 +8,16 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { dateToInputDateTime } from "utils/form";
 import { z } from "zod";
+import DeleteItineraryItemButton from "./DeleteItineraryItemButton";
 
 type DefaultValues = {
   campId: string;
 } & Partial<Schema>;
 
 type Props = {
-  isLoading?: boolean;
   onSubmit: (data: Schema) => void;
   defaultValues: DefaultValues;
+  buttonProps: { isLoading: boolean } & Partial<ButtonProps>;
 };
 
 const schema = z.object({
@@ -101,17 +103,13 @@ export default function SingleTrackItineraryForm(props: Props) {
       </div>
 
       {props.defaultValues.id && (
-        <Button
-          intent="danger"
-          text="Delete session"
-          Icon={TrashIcon}
-          className="mt-4 justify-center"
-        />
+        <DeleteItineraryItemButton itineraryItemId={props.defaultValues.id} />
       )}
       <Button
-        text="Add new session"
-        disabled={!formState.isValid}
-        isLoading={props.isLoading}
+        {...props.buttonProps}
+        text={props.buttonProps.text ?? "Submit"}
+        disabled={!formState.isValid || props.buttonProps.disabled}
+        isLoading={props.buttonProps.isLoading}
         className="mt-6 justify-center"
       />
     </form>

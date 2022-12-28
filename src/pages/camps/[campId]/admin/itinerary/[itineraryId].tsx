@@ -15,7 +15,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Page: NextPage = () => {
   const router = useRouter();
-  const campId = router.query.itineraryId as string;
+  const campId = router.query.campId as string;
   const itineraryId = Number(router.query.itineraryId as string);
 
   const { data } = trpc.itinerary.get.useQuery(
@@ -31,12 +31,12 @@ const Page: NextPage = () => {
   }, [data?.options]);
 
   const utils = trpc.useContext();
-  const { mutate, isLoading } = trpc.itinerary.create.useMutation({
+  const { mutate, isLoading } = trpc.itinerary.update.useMutation({
+    onError: (error) => toast.error(error.message),
     onSuccess: () => {
       utils.itinerary.getAll.invalidate();
       router.push(`/camps/${campId}/admin/itinerary`);
     },
-    onError: (error) => toast.error(error.message),
   });
 
   return (
@@ -46,8 +46,8 @@ const Page: NextPage = () => {
       {data && itineraryType === "singleTrack" && (
         <SingleTrackItineraryForm
           defaultValues={data}
-          isLoading={isLoading}
-          onSubmit={mutate}
+          buttonProps={{ text: "Save changes", isLoading }}
+          onSubmit={(formData) => mutate({ ...formData, id: data.id })}
         />
       )}
     </main>

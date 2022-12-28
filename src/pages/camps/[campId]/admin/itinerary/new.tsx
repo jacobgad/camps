@@ -37,7 +37,7 @@ const Page: NextPage = () => {
       {itineraryType === "singleTrack" && (
         <SingleTrackItineraryForm
           defaultValues={{ campId }}
-          isLoading={isLoading}
+          buttonProps={{ text: "Create itinerary item", isLoading }}
           onSubmit={mutate}
         />
       )}
