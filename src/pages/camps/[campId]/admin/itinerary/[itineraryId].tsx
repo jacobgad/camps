@@ -6,6 +6,7 @@ import { trpc } from "utils/trpc";
 import { toast } from "react-hot-toast";
 import SingleTrackItineraryForm from "components/itinerary/SingleTrackItineraryForm";
 import { useMemo } from "react";
+import Layout from "components/layout/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -40,7 +41,7 @@ const Page: NextPage = () => {
   });
 
   return (
-    <main className="flex flex-col p-4">
+    <Layout>
       <h1 className="mb-6">Itinerary</h1>
 
       {data && itineraryType === "singleTrack" && (
@@ -50,7 +51,7 @@ const Page: NextPage = () => {
           onSubmit={(formData) => mutate({ ...formData, id: data.id })}
         />
       )}
-    </main>
+    </Layout>
   );
 };
 

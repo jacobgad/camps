@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useState } from "react";
 import ItineraryItemForm from "components/itinerary/ItineraryTypeForm";
 import SingleTrackItineraryForm from "components/itinerary/SingleTrackItineraryForm";
+import Layout from "components/layout/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -30,7 +31,7 @@ const Page: NextPage = () => {
   });
 
   return (
-    <main className="flex flex-col p-4">
+    <Layout>
       <h1 className="mb-6">Itinerary</h1>
       <ItineraryItemForm value={itineraryType} onChange={setItineraryType} />
 
@@ -41,7 +42,7 @@ const Page: NextPage = () => {
           onSubmit={mutate}
         />
       )}
-    </main>
+    </Layout>
   );
 };
 

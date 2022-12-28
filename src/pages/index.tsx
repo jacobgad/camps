@@ -1,15 +1,16 @@
 import { type NextPage } from "next";
 import Button from "@ui/Button";
 import Link from "next/link";
+import Layout from "../components/layout/Layout";
 
 const Home: NextPage = () => {
   return (
-    <main className="px-4 py-8">
-      <h1>Camps</h1>
+    <Layout>
+      <h1 className="mb-4">Camps</h1>
       <Link href="/camps">
-        <Button text="My Camps" />
+        <Button text="My Camps" fullWidth className="justify-center" />
       </Link>
-    </main>
+    </Layout>
   );
 };
 

@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import { isAuthed } from "utils/auth";
 import CampDetailsForm from "components/camp/CampDetailsForm";
+import Layout from "components/layout/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -22,10 +23,10 @@ const NewCamp: NextPage = () => {
   });
 
   return (
-    <main className="flex flex-col px-4 py-8">
+    <Layout>
       <h1>New Camp</h1>
       <CampDetailsForm isLoading={isLoading} onSubmit={mutate} />
-    </main>
+    </Layout>
   );
 };
 

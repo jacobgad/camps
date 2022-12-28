@@ -11,6 +11,7 @@ import { toast } from "react-hot-toast";
 import { trpc } from "utils/trpc";
 import Link from "next/link";
 import { isAuthed } from "utils/auth";
+import Layout from "components/layout/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -30,7 +31,7 @@ const Page: NextPage = () => {
   );
 
   return (
-    <main className="flex flex-col px-4 py-8">
+    <Layout>
       <h1>Manage Camp</h1>
       <h2 className="mt-2 h-6 text-base font-bold text-gray-500">
         {data?.name}
@@ -73,7 +74,7 @@ const Page: NextPage = () => {
           />
         </Link>
       </div>
-    </main>
+    </Layout>
   );
 };
 

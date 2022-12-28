@@ -11,12 +11,9 @@ body {
   @apply h-full bg-gray-50;
 }
 
-#__next {
-  @apply h-full;
-}
-
-main {
-  @apply min-h-full;
+#__next,
+#next-font {
+  @apply h-full justify-center;
 }
 
 h1 {

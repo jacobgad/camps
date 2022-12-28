@@ -23,10 +23,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={inter.className}>
+      <div id="next-font" className={inter.className}>
         <Component {...pageProps} />
         <Toaster />
-      </main>
+      </div>
       <ReactQueryDevtools initialIsOpen={false} />
     </SessionProvider>
   );

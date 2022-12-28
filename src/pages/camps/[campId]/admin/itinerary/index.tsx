@@ -10,6 +10,7 @@ import { groupItinerary } from "utils/itinerary";
 import { format } from "date-fns";
 import ItemCard from "@ui/cards/ItemCard";
 import { toast } from "react-hot-toast";
+import Layout from "components/layout/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -30,7 +31,7 @@ const Page: NextPage = () => {
   const groupedItinerary = useMemo(() => groupItinerary(data ?? []), [data]);
 
   return (
-    <main className="flex flex-col px-4 py-8">
+    <Layout>
       <h1>Itinerary</h1>
       <Link href={`/camps/${campId}/admin/itinerary/new`} className="my-6">
         <Button
@@ -63,7 +64,7 @@ const Page: NextPage = () => {
           </ul>
         </div>
       ))}
-    </main>
+    </Layout>
   );
 };
 

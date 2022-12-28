@@ -50,7 +50,7 @@ export default function SingleTrackItineraryForm(props: Props) {
   return (
     <form
       onSubmit={handleSubmit((data) => props.onSubmit(data))}
-      className="flex h-full flex-col"
+      className="flex flex-grow flex-col"
     >
       <div className="flex flex-grow flex-col gap-4">
         <Input

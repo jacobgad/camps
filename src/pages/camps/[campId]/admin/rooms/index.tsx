@@ -6,6 +6,7 @@ import { PlusIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import Button from "@ui/Button";
 import ItemCard from "@ui/cards/ItemCard";
+import Layout from "components/layout/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -19,7 +20,7 @@ const Page: NextPage = () => {
   const { data } = trpc.room.getAll.useQuery({ campId });
 
   return (
-    <main className="flex flex-col px-4 py-8">
+    <Layout>
       <h1 className="mb-6">Rooms</h1>
 
       <Link href={`/camps/${campId}/admin/rooms/new`}>
@@ -43,7 +44,7 @@ const Page: NextPage = () => {
           </li>
         ))}
       </ul>
-    </main>
+    </Layout>
   );
 };
 

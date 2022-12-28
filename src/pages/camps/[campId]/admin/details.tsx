@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { trpc } from "utils/trpc";
 import CampDetailsForm from "components/camp/CampDetailsForm";
 import { isAuthed } from "utils/auth";
+import Layout from "components/layout/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -34,7 +35,7 @@ const NewCamp: NextPage = () => {
   });
 
   return (
-    <main className="flex flex-col px-4 py-8">
+    <Layout>
       <h1>Details</h1>
       {data && (
         <CampDetailsForm
@@ -44,7 +45,7 @@ const NewCamp: NextPage = () => {
           buttonText="Save changes"
         />
       )}
-    </main>
+    </Layout>
   );
 };
 

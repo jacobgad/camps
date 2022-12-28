@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { trpc } from "utils/trpc";
 import DeleteRoomButton from "components/room/DeleteRoomButton";
 import MemberCard from "components/room/MemberCard";
+import Layout from "components/layout/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -34,7 +35,7 @@ const Page: NextPage = () => {
   });
 
   return (
-    <main className="flex flex-col px-4 py-8">
+    <Layout>
       <h1 className="mb-6">Rooms</h1>
 
       {data && (
@@ -64,7 +65,7 @@ const Page: NextPage = () => {
           </li>
         ))}
       </ul>
-    </main>
+    </Layout>
   );
 };
 

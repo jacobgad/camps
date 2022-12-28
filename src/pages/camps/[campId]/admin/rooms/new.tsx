@@ -5,6 +5,7 @@ import { isAuthed } from "utils/auth";
 import { toast } from "react-hot-toast";
 import { trpc } from "utils/trpc";
 import { PlusIcon } from "@heroicons/react/20/solid";
+import Layout from "components/layout/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -25,7 +26,7 @@ const Page: NextPage = () => {
   });
 
   return (
-    <main className="flex flex-col px-4 py-8">
+    <Layout>
       <h1 className="mb-6">Rooms</h1>
 
       <RoomForm
@@ -33,7 +34,7 @@ const Page: NextPage = () => {
         defaultValues={{ campId }}
         buttonProps={{ isLoading, Icon: PlusIcon, text: "Add new room" }}
       />
-    </main>
+    </Layout>
   );
 };
 
