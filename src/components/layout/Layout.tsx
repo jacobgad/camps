@@ -6,33 +6,32 @@ type Props = {
   className?: string;
 } & VariantProps<typeof layoutStyles>;
 
-const layoutStyles = cva("h-full", {
-  variants: {
-    variant: {
-      light: "bg-gray-50",
-      dark: "bg-[#0D1522]",
+const layoutStyles = cva(
+  "container mx-auto flex min-h-full max-w-md flex-col",
+  {
+    variants: {
+      variant: {
+        light: "bg-gray-50",
+        dark: "bg-[#0D1522]",
+      },
+      gutter: {
+        true: "px-4 py-8",
+      },
     },
-    gutter: {
-      true: "px-4 py-8",
+    defaultVariants: {
+      variant: "light",
+      gutter: true,
     },
-  },
-  defaultVariants: {
-    variant: "light",
-    gutter: true,
-  },
-});
+  }
+);
 
 export default function Layout(props: Props) {
   const { children, variant, gutter, className } = props;
 
   return (
     <>
-      <main className={layoutStyles({ variant, gutter })}>
-        <div
-          className={`container mx-auto flex min-h-full max-w-md flex-col ${className}`}
-        >
-          {children}
-        </div>
+      <main className={layoutStyles({ variant, gutter, className })}>
+        {children}
       </main>
 
       <style jsx global>{`
