@@ -46,10 +46,12 @@ const Page: NextPage = () => {
                 <p className="mb-2 text-sm font-semibold tracking-wider text-gray-500">
                   {format(item.date, "h aa")}
                 </p>
-                <ItemCard
-                  label={item.name}
-                  description="Single-track session"
-                />
+                <Link href={`/camps/${campId}/admin/itinerary/${item.id}`}>
+                  <ItemCard
+                    label={item.name}
+                    description="Single-track session"
+                  />
+                </Link>
               </li>
             ))}
           </ul>

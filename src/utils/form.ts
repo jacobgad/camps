@@ -1,4 +1,5 @@
 import type { Maybe } from "@trpc/server";
+import { format } from "date-fns";
 
 function isValidDate(date: Date) {
   return !isNaN(date.getTime());
@@ -13,5 +14,12 @@ export function dateToInputDate(date?: Maybe<Date>) {
   if (!date || !isValidDate(date)) {
     return undefined;
   }
-  return date.toJSON().slice(0, 10) as unknown as Date;
+  return format(date, "yyyy-MM-dd") as unknown as Date;
+}
+
+export function dateToInputDateTime(date?: Maybe<Date>) {
+  if (!date || !isValidDate(date)) {
+    return undefined;
+  }
+  return format(date, "yyyy-MM-dd'T'HH:mm") as unknown as Date;
 }

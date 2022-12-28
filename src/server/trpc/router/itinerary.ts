@@ -17,13 +17,26 @@ export const itineraryRouter = router({
       });
     }),
 
+  get: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .query(({ input, ctx }) => {
+      return ctx.prisma.itineraryItem.findUnique({
+        where: { id: input.id },
+        include: { options: true },
+      });
+    }),
+
   create: protectedProcedure
     .input(
       z.object({
         campId: z.string().cuid(),
         name: z.string().min(3),
-        description: z.string().optional(),
-        location: z.string().optional(),
+        description: z.string().optional().nullable(),
+        location: z.string().optional().nullable(),
         date: z.date(),
       })
     )

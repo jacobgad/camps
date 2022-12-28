@@ -1,10 +1,11 @@
-import { UserIcon, MapPinIcon } from "@heroicons/react/20/solid";
+import { UserIcon, MapPinIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@ui/Button";
 import Input from "@ui/Input";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { dateToInputDateTime } from "utils/form";
 import { z } from "zod";
 
 type DefaultValues = {
@@ -18,10 +19,11 @@ type Props = {
 };
 
 const schema = z.object({
-  campId: z.string().cuid(),
+  id: z.number().optional(),
   name: z.string().min(3),
-  description: z.string().optional(),
-  location: z.string().optional(),
+  campId: z.string().cuid(),
+  description: z.string().optional().nullable(),
+  location: z.string().optional().nullable(),
   date: z.date(),
 });
 type Schema = z.infer<typeof schema>;
@@ -36,7 +38,11 @@ export default function SingleTrackItineraryForm(props: Props) {
 
   const { register, formState, handleSubmit } = useForm<Schema>({
     resolver: zodResolver(schema),
-    defaultValues: props.defaultValues,
+    mode: "onTouched",
+    defaultValues: {
+      ...props.defaultValues,
+      date: dateToInputDateTime(props.defaultValues.date),
+    },
   });
 
   return (
@@ -45,18 +51,24 @@ export default function SingleTrackItineraryForm(props: Props) {
       className="flex h-full flex-col"
     >
       <div className="flex flex-grow flex-col gap-4">
-        <Input label="Session Name" {...register("name")} />
+        <Input
+          label="Session Name"
+          {...register("name")}
+          error={formState.errors.name?.message}
+        />
         <Input
           label="Date"
           type="datetime-local"
           Icon={CalendarIcon}
           {...register("date", { valueAsDate: true })}
+          error={formState.errors.date?.message}
         />
         {showDescription ? (
           <Input
             label="Description"
             helperText="optional"
             {...register("description")}
+            error={formState.errors.description?.message}
           />
         ) : (
           <Button
@@ -74,6 +86,7 @@ export default function SingleTrackItineraryForm(props: Props) {
             helperText="optional"
             Icon={MapPinIcon}
             {...register("location")}
+            error={formState.errors.location?.message}
           />
         ) : (
           <Button
@@ -87,11 +100,19 @@ export default function SingleTrackItineraryForm(props: Props) {
         )}
       </div>
 
+      {props.defaultValues.id && (
+        <Button
+          intent="danger"
+          text="Delete session"
+          Icon={TrashIcon}
+          className="mt-4 justify-center"
+        />
+      )}
       <Button
         text="Add new session"
         disabled={!formState.isValid}
         isLoading={props.isLoading}
-        className="mt-4 justify-center"
+        className="mt-6 justify-center"
       />
     </form>
   );
