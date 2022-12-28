@@ -1,9 +1,12 @@
 import type { GetServerSideProps, NextPage } from "next";
-import CreateItineraryItemForm from "components/itinerary/ItineraryItemForm";
+import type { ItineraryType } from "components/itinerary/ItineraryTypeForm";
 import { useRouter } from "next/router";
 import { isAuthed } from "utils/auth";
 import { trpc } from "utils/trpc";
 import { toast } from "react-hot-toast";
+import { useState } from "react";
+import ItineraryItemForm from "components/itinerary/ItineraryTypeForm";
+import SingleTrackItineraryForm from "components/itinerary/SingleTrackItineraryForm";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -14,6 +17,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Page: NextPage = () => {
   const router = useRouter();
   const campId = router.query.campId as string;
+  const [itineraryType, setItineraryType] =
+    useState<ItineraryType>("singleTrack");
 
   const utils = trpc.useContext();
   const { mutate, isLoading } = trpc.itinerary.create.useMutation({
@@ -27,11 +32,15 @@ const Page: NextPage = () => {
   return (
     <main className="flex flex-col p-4">
       <h1 className="mb-6">Itinerary</h1>
-      <CreateItineraryItemForm
-        campId={campId}
-        isLoading={isLoading}
-        onSubmit={mutate}
-      />
+      <ItineraryItemForm value={itineraryType} onChange={setItineraryType} />
+
+      {itineraryType === "singleTrack" && (
+        <SingleTrackItineraryForm
+          defaultValues={{ campId }}
+          isLoading={isLoading}
+          onSubmit={mutate}
+        />
+      )}
     </main>
   );
 };
