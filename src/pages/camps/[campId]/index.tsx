@@ -26,7 +26,7 @@ const Page: NextPage = () => {
   );
 
   return (
-    <Layout className="bg-gray-900">
+    <Layout variant='dark'>
       <div className="mb-6">
         <h1 className="text-2xl text-gray-100">{data?.camp.name}</h1>
         <p className="mt-1 text-xs font-medium uppercase tracking-wide text-gray-400">

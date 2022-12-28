@@ -9,7 +9,7 @@ export async function isAuthed(context: Context) {
   if (session) return null;
   return {
     redirect: {
-      destination: `/signin?callbackUrl=${context.resolvedUrl}`,
+      destination: `/?callbackUrl=${context.resolvedUrl}`,
       permanent: false,
     },
   };
