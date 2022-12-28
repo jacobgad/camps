@@ -13,7 +13,7 @@ export default function HeroLayout({ children }: Props) {
         quality={100}
         src="/camps.png"
         width={448}
-        height={670}
+        height={631}
         alt="camps"
         className="-z-10 w-full"
       />
@@ -22,7 +22,7 @@ export default function HeroLayout({ children }: Props) {
         <p className="text-sm font-medium tracking-wide">Camp Registration</p>
       </header>
 
-      <div className="-my-8 px-4 pb-8">{children}</div>
+      <div className="mt-2 px-4 pb-8">{children}</div>
     </Layout>
   );
 }
