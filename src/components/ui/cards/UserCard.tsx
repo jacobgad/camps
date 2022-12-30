@@ -1,7 +1,7 @@
 import { UserIcon } from "@heroicons/react/24/outline";
 
 type UserCardProps = {
-  text: string | null;
+  text: string;
   onClick?: () => void;
 };
 

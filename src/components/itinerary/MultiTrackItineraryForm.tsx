@@ -36,8 +36,8 @@ const schema = z.object({
       id: z.number().optional(),
       name: z.string().min(3),
       capacity: z.number().positive(),
-      description: z.string().optional(),
-      location: z.string().optional(),
+      description: z.string().optional().nullable(),
+      location: z.string().optional().nullable(),
     })
   ),
 });
@@ -137,16 +137,18 @@ export default function MultiTrackItineraryForm(props: Props) {
         />
       </div>
 
-      {props.defaultValues.id && (
-        <DeleteItineraryItemButton itineraryItemId={props.defaultValues.id} />
-      )}
-      <Button
-        {...props.buttonProps}
-        text={props.buttonProps.text ?? "Submit"}
-        disabled={!formState.isValid || props.buttonProps.disabled}
-        isLoading={props.buttonProps.isLoading}
-        className="mt-14 justify-center"
-      />
+      <div className="mt-6 flex flex-col gap-6">
+        {props.defaultValues.id && (
+          <DeleteItineraryItemButton itineraryItemId={props.defaultValues.id} />
+        )}
+        <Button
+          {...props.buttonProps}
+          text={props.buttonProps.text ?? "Submit"}
+          disabled={!formState.isValid || props.buttonProps.disabled}
+          isLoading={props.buttonProps.isLoading}
+          className="justify-center"
+        />
+      </div>
     </form>
   );
 }

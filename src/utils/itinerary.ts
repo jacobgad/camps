@@ -1,17 +1,14 @@
-import type { ItineraryItem, ItineraryOption } from "@prisma/client";
-import { startOfDay } from "date-fns";
+type GroupedItems<T> = { [key: string]: T[] };
 
-type Itinerary = (ItineraryItem & {
-  options: ItineraryOption[];
-})[];
-type GroupedItinerary = { [key: string]: Itinerary };
-
-export function groupItinerary(items: Itinerary): GroupedItinerary {
-  const groupedItinerary: GroupedItinerary = {};
+export function groupBy<T>(
+  items: T[],
+  getKey: (item: T) => string
+): GroupedItems<T> {
+  const groupedItems: GroupedItems<T> = {};
   items.forEach((item) => {
-    const key = startOfDay(item.date).toISOString();
-    const array = groupedItinerary[key];
-    array ? array.push(item) : (groupedItinerary[key] = [item]);
+    const key = getKey(item);
+    const array = groupedItems[key];
+    array ? array.push(item) : (groupedItems[key] = [item]);
   });
-  return groupedItinerary;
+  return groupedItems;
 }

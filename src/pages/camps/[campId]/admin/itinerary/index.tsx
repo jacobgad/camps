@@ -6,8 +6,8 @@ import { useRouter } from "next/router";
 import { isAuthed } from "utils/auth";
 import { trpc } from "utils/trpc";
 import { useMemo } from "react";
-import { groupItinerary } from "utils/itinerary";
-import { format } from "date-fns";
+import { groupBy } from "utils/itinerary";
+import { format, startOfDay } from "date-fns";
 import ItemCard from "@ui/cards/ItemCard";
 import { toast } from "react-hot-toast";
 import Layout from "components/layout/Layout";
@@ -28,7 +28,10 @@ const Page: NextPage = () => {
     }
   );
 
-  const groupedItinerary = useMemo(() => groupItinerary(data ?? []), [data]);
+  const groupedItinerary = useMemo(
+    () => groupBy(data ?? [], (item) => startOfDay(item.date).toISOString()),
+    [data]
+  );
 
   return (
     <Layout>
@@ -43,7 +46,7 @@ const Page: NextPage = () => {
       </Link>
 
       {Object.entries(groupedItinerary).map(([day, itinerary], idx) => (
-        <div key={day} className={idx > 0 ? "mt-8 border-t pt-8" : ""}>
+        <div key={day} className={`${idx > 0 && "mt-8 border-t pt-8"}`}>
           <h2 className="mb-2 text-base font-bold">
             {format(new Date(day), "dd MMM yyyy")}
           </h2>
@@ -51,13 +54,26 @@ const Page: NextPage = () => {
             {itinerary.map((item) => (
               <li key={item.id}>
                 <p className="mb-2 text-sm font-semibold tracking-wider text-gray-500">
-                  {format(item.date, "h aa")}
+                  {format(item.date, "h:mm aa")}
                 </p>
                 <Link href={`/camps/${campId}/admin/itinerary/${item.id}`}>
-                  <ItemCard
-                    label={item.name}
-                    description="Single-track session"
-                  />
+                  {item.options.length === 0 ? (
+                    <ItemCard
+                      label={item.name}
+                      description="Single-track session"
+                    />
+                  ) : (
+                    <>
+                      {item.options.map((option, idx) => (
+                        <div key={option.id} className={`${idx > 0 && "mt-2"}`}>
+                          <ItemCard
+                            label={option.name}
+                            description={`Multi-track session | Capacity ${option.members.length}/${option.capacity}`}
+                          />
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </Link>
               </li>
             ))}

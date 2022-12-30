@@ -37,7 +37,9 @@ export const itineraryRouter = router({
 
       return ctx.prisma.itineraryItem.findMany({
         where: { campId: input.campId },
-        include: { options: true },
+        include: {
+          options: { include: { members: { select: { id: true } } } },
+        },
         orderBy: { date: "asc" },
       });
     }),
@@ -76,7 +78,19 @@ export const itineraryRouter = router({
 
       return ctx.prisma.itineraryItem.findUnique({
         where: { id: input.id },
-        include: { options: true },
+        include: {
+          options: {
+            include: {
+              members: {
+                select: {
+                  id: true,
+                  user: { select: { name: true, email: true } },
+                },
+                orderBy: { user: { name: "asc" } },
+              },
+            },
+          },
+        },
       });
     }),
 

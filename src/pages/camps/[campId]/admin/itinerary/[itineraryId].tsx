@@ -7,6 +7,8 @@ import { toast } from "react-hot-toast";
 import SingleTrackItineraryForm from "components/itinerary/SingleTrackItineraryForm";
 import { useMemo } from "react";
 import Layout from "components/layout/Layout";
+import MultiTrackItineraryForm from "components/itinerary/MultiTrackItineraryForm";
+import UserCard from "@ui/cards/UserCard";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -50,6 +52,31 @@ const Page: NextPage = () => {
           buttonProps={{ text: "Save changes", isLoading }}
           onSubmit={(formData) => mutate({ ...formData, id: data.id })}
         />
+      )}
+
+      {data && itineraryType === "multiTrack" && (
+        <>
+          <MultiTrackItineraryForm
+            defaultValues={data}
+            buttonProps={{ text: "Save changes", isLoading }}
+            onSubmit={(formData) => mutate({ ...formData, id: data.id })}
+          />
+
+          <div className="mt-10">
+            {data.options.map((option) => (
+              <div key={option.id}>
+                <p className="mt-8 text-lg font-medium">{option.name}</p>
+                <ul className="mt-4">
+                  {option.members.map((member, idx) => (
+                    <li key={member.id} className={`${idx > 0 && "mt-2"}`}>
+                      <UserCard text={member.user.name ?? member.user.email} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </Layout>
   );

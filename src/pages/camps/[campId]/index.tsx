@@ -1,9 +1,9 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { format } from "date-fns";
+import { format, startOfDay } from "date-fns";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { isAuthed } from "utils/auth";
-import { groupItinerary } from "utils/itinerary";
+import { groupBy } from "utils/itinerary";
 import { trpc } from "utils/trpc";
 import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 import Card from "@ui/cards/Card";
@@ -21,7 +21,10 @@ const Page: NextPage = () => {
   const { data } = trpc.member.get.useQuery({ campId });
 
   const groupedItinerary = useMemo(
-    () => groupItinerary(data?.camp.itineraryItems ?? []),
+    () =>
+      groupBy(data?.camp.itineraryItems ?? [], (item) =>
+        startOfDay(item.date).toISOString()
+      ),
     [data?.camp.itineraryItems]
   );
 
