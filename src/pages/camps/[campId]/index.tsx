@@ -35,7 +35,7 @@ const Page: NextPage = () => {
       </div>
 
       {Object.entries(groupedItinerary).map(([day, itinerary]) => (
-        <Card key={day} variant="dark" className="mt-4 flex gap-3">
+        <Card key={day} className="mt-4 flex gap-3 bg-white py-5 px-6">
           <CalendarDaysIcon className="h-6 text-gray-900" />
 
           <div className="flex-grow">

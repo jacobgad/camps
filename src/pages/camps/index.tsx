@@ -10,12 +10,24 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { isAuthed } from "utils/auth";
 import { trpc } from "../../utils/trpc";
+import { toast } from "react-hot-toast";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
   if (redirect) return redirect;
   return { props: {} };
 };
+
+async function copyRegistrationLink(campId: string) {
+  try {
+    await navigator.clipboard.writeText(
+      window.location.origin + `/camps/${campId}/register`
+    );
+    toast.success("Registration link copied");
+  } catch (error) {
+    toast.error("Error copying registration link");
+  }
+}
 
 const Camps: NextPage = () => {
   const { data } = trpc.camp.getAll.useQuery();
@@ -69,6 +81,7 @@ const Camps: NextPage = () => {
                   intent="secondary"
                   fullWidth
                   className="justify-center"
+                  onClick={() => copyRegistrationLink(camp.id)}
                 />
               </div>
             </CampCard>

@@ -1,6 +1,5 @@
 import { RadioGroup as RG } from "@headlessui/react";
-import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import Card from "./cards/Card";
+import ItemCard from "./cards/ItemCard";
 
 type Option = {
   id: number | string;
@@ -36,37 +35,12 @@ export function RadioGroup<T>(props: RadioGroupProps<T>) {
               disabled={formattedOption.disabled}
             >
               {({ checked, disabled }) => (
-                <Card
-                  className={`flex items-center justify-between transition ${
-                    checked ? "bg-indigo-600" : disabled && "bg-gray-200"
-                  }`}
-                >
-                  <div className="text-sm">
-                    <RG.Label
-                      className={`font-semibold transition ${
-                        checked
-                          ? "text-indigo-50"
-                          : disabled
-                          ? "text-gray-500"
-                          : "text-gray-900"
-                      }`}
-                    >
-                      {formattedOption.label}
-                    </RG.Label>
-                    <RG.Description
-                      className={`font-normal transition ${
-                        checked ? "text-indigo-100" : "text-gray-500"
-                      }`}
-                    >
-                      {formattedOption.description}
-                    </RG.Description>
-                  </div>
-                  <CheckCircleIcon
-                    className={`h-6 text-indigo-50 transition ${
-                      !checked && "opacity-0"
-                    }`}
-                  />
-                </Card>
+                <ItemCard
+                  selected={checked}
+                  disabled={disabled}
+                  label={formattedOption.label}
+                  description={formattedOption.description}
+                />
               )}
             </RG.Option>
           );
