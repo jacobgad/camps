@@ -2,7 +2,7 @@ import { forwardRef, useId } from "react";
 import { motion } from "framer-motion";
 
 type Ref = HTMLInputElement;
-type Props = {
+export type InputProps = {
   label: string;
   Icon?: React.ElementType;
   error?: string;
@@ -10,7 +10,7 @@ type Props = {
   helperText?: string;
 } & React.ComponentProps<"input">;
 
-export default forwardRef<Ref, Props>(function Input(
+export default forwardRef<Ref, InputProps>(function Input(
   { label, Icon, error, fullWidth, helperText, ...props },
   ref
 ) {

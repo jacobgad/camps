@@ -85,9 +85,19 @@ export const itineraryRouter = router({
       z.object({
         campId: z.string().cuid(),
         name: z.string().min(3),
+        date: z.date(),
         description: z.string().optional().nullable(),
         location: z.string().optional().nullable(),
-        date: z.date(),
+        options: z
+          .array(
+            z.object({
+              name: z.string().min(3),
+              capacity: z.number().positive(),
+              description: z.string().optional().nullable(),
+              location: z.string().optional().nullable(),
+            })
+          )
+          .optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -110,8 +120,12 @@ export const itineraryRouter = router({
         });
       }
 
+      const { options: itineraryOptions, ...itineraryItem } = input;
       return ctx.prisma.itineraryItem.create({
-        data: input,
+        data: {
+          ...itineraryItem,
+          options: { createMany: { data: itineraryOptions ?? [] } },
+        },
       });
     }),
 

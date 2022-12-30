@@ -4,10 +4,11 @@ import { useRouter } from "next/router";
 import { isAuthed } from "utils/auth";
 import { trpc } from "utils/trpc";
 import { toast } from "react-hot-toast";
-import { useState } from "react";
 import ItineraryItemForm from "components/itinerary/ItineraryTypeForm";
 import SingleTrackItineraryForm from "components/itinerary/SingleTrackItineraryForm";
 import Layout from "components/layout/Layout";
+import MultiTrackItineraryForm from "components/itinerary/MultiTrackItineraryForm";
+import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -38,6 +39,20 @@ const Page: NextPage = () => {
       {itineraryType === "singleTrack" && (
         <SingleTrackItineraryForm
           defaultValues={{ campId }}
+          buttonProps={{ text: "Create itinerary item", isLoading }}
+          onSubmit={mutate}
+        />
+      )}
+
+      {itineraryType === "multiTrack" && (
+        <MultiTrackItineraryForm
+          defaultValues={{
+            campId,
+            options: [
+              { name: "", capacity: 0 },
+              { name: "", capacity: 0 },
+            ],
+          }}
           buttonProps={{ text: "Create itinerary item", isLoading }}
           onSubmit={mutate}
         />
