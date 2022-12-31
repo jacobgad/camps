@@ -38,7 +38,10 @@ export const itineraryRouter = router({
       return ctx.prisma.itineraryItem.findMany({
         where: { campId: input.campId },
         include: {
-          options: { include: { members: { select: { id: true } } } },
+          options: {
+            include: { members: { select: { id: true } } },
+            orderBy: { name: "asc" },
+          },
         },
         orderBy: { date: "asc" },
       });
@@ -89,6 +92,7 @@ export const itineraryRouter = router({
                 orderBy: { user: { name: "asc" } },
               },
             },
+            orderBy: { name: "asc" },
           },
         },
       });
@@ -148,9 +152,20 @@ export const itineraryRouter = router({
       z.object({
         id: z.number(),
         name: z.string().min(3),
+        date: z.date(),
         description: z.string().optional().nullable(),
         location: z.string().optional().nullable(),
-        date: z.date(),
+        options: z
+          .array(
+            z.object({
+              id: z.number().optional(),
+              name: z.string().min(3),
+              capacity: z.number().positive(),
+              description: z.string().optional().nullable(),
+              location: z.string().optional().nullable(),
+            })
+          )
+          .optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -172,9 +187,39 @@ export const itineraryRouter = router({
           message: "You are not an organiser of this camp",
         });
       }
-      return ctx.prisma.itineraryItem.update({
-        where: { id: input.id },
-        data: input,
+      const { options: _inputOptions, ...inputItem } = input;
+      const inputOptions = _inputOptions ?? [];
+
+      return ctx.prisma.$transaction(async (tx) => {
+        //Update itinerary item
+        const item = await tx.itineraryItem.update({
+          where: { id: input.id },
+          data: inputItem,
+          include: { options: true },
+        });
+
+        //update or create new or updated options
+        const options = await Promise.all(
+          inputOptions.map((option) =>
+            tx.itineraryOption.upsert({
+              where: { id: option.id },
+              update: option,
+              create: { ...option, itineraryItemId: input.id },
+            })
+          )
+        );
+
+        //Delete options that have been removed
+        const inputOptionIds = input.options?.map((option) => option.id) ?? [];
+        const optionIdsToBeDeleted = item.options
+          .filter((option) => !inputOptionIds.includes(option.id))
+          .map((option) => option.id);
+
+        await tx.itineraryOption.deleteMany({
+          where: { id: { in: optionIdsToBeDeleted } },
+        });
+
+        return { ...item, options };
       });
     }),
 

@@ -60,7 +60,7 @@ model ItineraryOption {
   location        String?
   capacity        Int
   members         Member[]
-  itineraryItem   ItineraryItem @relation(fields: [itineraryItemId], references: [id])
+  itineraryItem   ItineraryItem @relation(fields: [itineraryItemId], references: [id], onDelete: Cascade)
   itineraryItemId Int
 }
 

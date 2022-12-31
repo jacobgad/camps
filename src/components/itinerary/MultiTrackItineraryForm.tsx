@@ -14,7 +14,7 @@ import {
   PlusCircleIcon,
   UserIcon,
 } from "@heroicons/react/20/solid";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 
 type DefaultValues = {
   campId: string;
@@ -44,7 +44,7 @@ const schema = z.object({
 export type MultiTrackSchema = z.infer<typeof schema>;
 
 export default function MultiTrackItineraryForm(props: Props) {
-  const { register, formState, handleSubmit, control } =
+  const { register, formState, handleSubmit, control, reset } =
     useForm<MultiTrackSchema>({
       resolver: zodResolver(schema),
       mode: "onBlur",
@@ -58,6 +58,10 @@ export default function MultiTrackItineraryForm(props: Props) {
     control,
     name: "options",
   });
+
+  useEffect(() => {
+    if (!formState.isDirty) reset(props.defaultValues);
+  }, [formState.isDirty, props.defaultValues, reset]);
 
   return (
     <form
@@ -114,7 +118,7 @@ export default function MultiTrackItineraryForm(props: Props) {
                   className: "-mt-2",
                 }}
               />
-              {idx > 1 && (
+              {fields.length > 2 && (
                 <Button
                   text="Remove session option"
                   Icon={MinusCircleIcon}
@@ -129,6 +133,7 @@ export default function MultiTrackItineraryForm(props: Props) {
 
         <hr />
         <Button
+          type="button"
           text="Add new session option"
           intent="secondary"
           Icon={PlusCircleIcon}
@@ -143,6 +148,7 @@ export default function MultiTrackItineraryForm(props: Props) {
         )}
         <Button
           {...props.buttonProps}
+          type="submit"
           text={props.buttonProps.text ?? "Submit"}
           disabled={!formState.isValid || props.buttonProps.disabled}
           isLoading={props.buttonProps.isLoading}

@@ -25,6 +25,7 @@ export default function DeleteItineraryItemButton(props: Props) {
   return (
     <Button
       {...buttonProps}
+      type="button"
       intent="danger"
       text="Delete session"
       Icon={TrashIcon}
