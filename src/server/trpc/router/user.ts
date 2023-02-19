@@ -17,7 +17,7 @@ export const userRouter = router({
         phone: phoneSchema,
       })
     )
-    .query(({ input, ctx }) => {
+    .mutation(({ input, ctx }) => {
       return ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: input,

@@ -1,3 +1,4 @@
+import type { ButtonProps } from "@ui/Button";
 import {
   EnvelopeIcon,
   CalendarIcon,
@@ -14,7 +15,8 @@ import { z } from "zod";
 
 type Props = {
   onSubmit: (data: Schema) => void;
-  defaultValues: Partial<Schema>;
+  defaultValues?: Partial<Schema>;
+  buttonProps: { isLoading: boolean } & Partial<ButtonProps>;
 };
 
 const schema = z.object({
@@ -31,10 +33,11 @@ const genderOptions = ["male", "female"];
 
 export default function PersonalInformationForm(props: Props) {
   const defaultValues = useMemo(
-    () => ({
-      ...props.defaultValues,
-      dob: dateToInputDate(props.defaultValues.dob),
-    }),
+    () =>
+      props.defaultValues && {
+        ...props.defaultValues,
+        dob: dateToInputDate(props.defaultValues.dob),
+      },
     [props.defaultValues]
   );
 
@@ -117,11 +120,12 @@ export default function PersonalInformationForm(props: Props) {
           className="justify-center"
         />
         <Button
+          {...props.buttonProps}
           text="Next"
           type="submit"
           Icon={ArrowRightIcon}
           fullWidth
-          disabled={!formState.isValid}
+          disabled={!formState.isValid || props.buttonProps.isLoading}
           className="justify-center"
         />
       </div>
