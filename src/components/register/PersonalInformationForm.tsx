@@ -4,21 +4,24 @@ import {
   UserIcon,
   ArrowRightIcon,
 } from "@heroicons/react/20/solid";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@ui/Button";
 import Input from "@ui/Input";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { dateToInputDate, phoneSchema } from "utils/form";
 import { z } from "zod";
 
 type Props = {
   onSubmit: (data: Schema) => void;
-  defaultValues?: Partial<Schema>;
+  defaultValues: Partial<Schema>;
 };
 
 const schema = z.object({
   name: z.string().min(3),
   email: z.string().email(),
   dob: z.date().max(new Date()),
-  phone: z.string().regex(/^\+61\s4\d{8}$/),
+  phone: phoneSchema,
   gender: z.enum(["male", "female"]),
 });
 
@@ -27,7 +30,23 @@ type Schema = z.infer<typeof schema>;
 const genderOptions = ["male", "female"];
 
 export default function PersonalInformationForm(props: Props) {
-  const { register, formState, handleSubmit } = useForm<Schema>();
+  const defaultValues = useMemo(
+    () => ({
+      ...props.defaultValues,
+      dob: dateToInputDate(props.defaultValues.dob),
+    }),
+    [props.defaultValues]
+  );
+
+  const { register, formState, reset, handleSubmit } = useForm<Schema>({
+    resolver: zodResolver(schema),
+    mode: "onTouched",
+    defaultValues,
+  });
+
+  useEffect(() => {
+    if (!formState.isDirty) reset(defaultValues);
+  }, [defaultValues, formState.isDirty, reset]);
 
   return (
     <form
@@ -36,19 +55,23 @@ export default function PersonalInformationForm(props: Props) {
     >
       <div className="flex flex-grow flex-col gap-6">
         <Input
-          label="Name"
+          label="Full Name"
+          placeholder="John Smith"
           Icon={UserIcon}
           {...register("name")}
           error={formState.errors.name?.message}
         />
         <Input
           label="Email address"
+          type="email"
           Icon={EnvelopeIcon}
           {...register("email")}
           error={formState.errors.email?.message}
+          disabled
         />
         <Input
           label="Date of birth"
+          type="date"
           Icon={CalendarIcon}
           {...register("dob", { valueAsDate: true })}
           error={formState.errors.dob?.message}
@@ -56,7 +79,10 @@ export default function PersonalInformationForm(props: Props) {
         <div>
           <Input
             label="Phone number"
+            placeholder="+61400000000"
+            type="tel"
             {...register("phone")}
+            prefix="+61"
             error={formState.errors.phone?.message}
           />
           <p className="mt-2 text-sm font-normal text-gray-500">
@@ -70,6 +96,7 @@ export default function PersonalInformationForm(props: Props) {
             <div key={gender}>
               <input
                 type="radio"
+                value={gender}
                 id={`gender-${gender}`}
                 {...register("gender")}
               />

@@ -1,5 +1,6 @@
 import type { Maybe } from "@trpc/server";
 import { format } from "date-fns";
+import { z } from "zod";
 
 function isValidDate(date: Date) {
   return !isNaN(date.getTime());
@@ -23,3 +24,7 @@ export function dateToInputDateTime(date?: Maybe<Date>) {
   }
   return format(date, "yyyy-MM-dd'T'HH:mm") as unknown as Date;
 }
+
+export const phoneSchema = z
+  .string()
+  .regex(/^(\+61)4\d{8}$/, "Not a valid AU mobile number");
