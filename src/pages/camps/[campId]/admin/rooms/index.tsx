@@ -38,7 +38,9 @@ const Page: NextPage = () => {
             <Link href={`/camps/${campId}/admin/rooms/${room.id}`}>
               <ItemCard
                 label={room.name}
-                description={`Capacity ${room.members.length}/${room.capacity}`}
+                description={`${
+                  room.gender === "male" ? "M" : "F"
+                } - Capacity ${room.members.length}/${room.capacity}`}
               />
             </Link>
           </li>

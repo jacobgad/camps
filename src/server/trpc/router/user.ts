@@ -15,6 +15,7 @@ export const userRouter = router({
         name: z.string(),
         dob: z.date().max(new Date()),
         phone: phoneSchema,
+        gender: z.enum(["male", "female"]),
       })
     )
     .mutation(({ input, ctx }) => {

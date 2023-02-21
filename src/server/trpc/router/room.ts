@@ -9,6 +9,7 @@ export const roomRouter = router({
         name: z.string().min(3),
         capacity: z.number().min(1),
         campId: z.string().cuid(),
+        gender: z.enum(["male", "female"]),
       })
     )
     .mutation(({ input, ctx }) => {
@@ -55,6 +56,7 @@ export const roomRouter = router({
         id: z.number(),
         name: z.string().min(3),
         capacity: z.number().min(1),
+        gender: z.enum(["male", "female"]),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -73,6 +75,13 @@ export const roomRouter = router({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Cannot reduce capacity to bellow member count",
+        });
+      }
+
+      if (room.gender !== input.gender && room.members.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Can only change room gender on empty room",
         });
       }
 
@@ -141,6 +150,13 @@ export const roomRouter = router({
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Only organisers can move other members",
+        });
+      }
+
+      if (reqMember.user.gender !== room.gender) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User gender does not match room gender",
         });
       }
 

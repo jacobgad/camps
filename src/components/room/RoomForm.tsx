@@ -5,6 +5,7 @@ import Button from "@ui/Button";
 import Input from "@ui/Input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useEffect } from "react";
 
 type Props = {
   defaultValues?: Partial<Schema>;
@@ -16,14 +17,21 @@ const schema = z.object({
   name: z.string().min(3),
   capacity: z.number().min(1),
   campId: z.string().cuid(),
+  gender: z.enum(["male", "female"]),
 });
 type Schema = z.infer<typeof schema>;
 
+const genderOptions = ["male", "female"];
+
 export default function RoomForm(props: Props) {
-  const { register, handleSubmit, formState } = useForm<Schema>({
+  const { register, handleSubmit, formState, reset } = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: props.defaultValues,
   });
+
+  useEffect(() => {
+    if (!formState.isDirty) reset(props.defaultValues);
+  }, [props.defaultValues, reset, formState.isDirty]);
 
   return (
     <form
@@ -39,6 +47,24 @@ export default function RoomForm(props: Props) {
           {...register("capacity", { valueAsNumber: true })}
         />
       </div>
+
+      <div className="space-y-2 text-sm font-medium text-gray-700">
+        <p className="text-sm font-medium">Gender</p>
+        {genderOptions.map((gender) => (
+          <div key={gender}>
+            <input
+              type="radio"
+              value={gender}
+              id={`gender-${gender}`}
+              {...register("gender")}
+            />
+            <label htmlFor={`gender-${gender}`} className="ml-2 capitalize">
+              {gender}
+            </label>
+          </div>
+        ))}
+      </div>
+
       <Button
         {...props.buttonProps}
         text={props.buttonProps?.text ?? "Submit"}

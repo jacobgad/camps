@@ -1,6 +1,7 @@
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import type { Camp, Room } from "@prisma/client";
 import Button from "@ui/Button";
+import { toast } from "react-hot-toast";
 import { trpc } from "utils/trpc";
 
 type Props = {
@@ -13,6 +14,7 @@ export default function RoomAssignmentForm(props: Props) {
   const utils = trpc.useContext();
   const { mutate, isLoading } = trpc.member.upsert.useMutation({
     onSuccess: () => utils.room.getAll.invalidate(),
+    onError: (error) => toast.error(error.message),
   });
 
   return (

@@ -35,10 +35,28 @@ export const memberRouter = router({
         include: { members: true },
       });
 
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session.user.id },
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User does not exist",
+        });
+      }
+
       if (!room) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Room does not exits",
+        });
+      }
+
+      if (room.gender !== user.gender) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User gender does not match room gender",
         });
       }
 
