@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
@@ -19,5 +20,45 @@ export const memberRouter = router({
           room: true,
         },
       });
+    }),
+
+  upsert: protectedProcedure
+    .input(
+      z.object({
+        campId: z.string().cuid(),
+        roomId: z.number().int(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const room = await ctx.prisma.room.findUnique({
+        where: { id: input.roomId },
+        include: { members: true },
+      });
+
+      if (!room) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Room does not exits",
+        });
+      }
+
+      if (room.members.length >= room.capacity) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Room is full" });
+      }
+
+      const member = await ctx.prisma.member.upsert({
+        where: {
+          campId_userId: { campId: input.campId, userId: ctx.session.user.id },
+        },
+        create: {
+          campId: input.campId,
+          userId: ctx.session.user.id,
+          roomId: room.id,
+        },
+        update: {
+          roomId: room.id,
+        },
+      });
+      return member;
     }),
 });

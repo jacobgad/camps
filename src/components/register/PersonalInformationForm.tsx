@@ -111,7 +111,7 @@ export default function PersonalInformationForm(props: Props) {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="mt-6 flex gap-2">
         <Button
           text="Back"
           type="button"

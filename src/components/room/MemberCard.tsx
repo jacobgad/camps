@@ -30,6 +30,7 @@ export default function MemberCard({ member }: Props) {
     <>
       <UserCard
         text={member.user.name ?? member.user.email}
+        actionText="Reallocate"
         onClick={() => setOpen(true)}
       />
       <Modal

@@ -69,7 +69,10 @@ const Page: NextPage = () => {
                 <ul className="mt-4">
                   {option.members.map((member, idx) => (
                     <li key={member.id} className={`${idx > 0 && "mt-2"}`}>
-                      <UserCard text={member.user.name ?? member.user.email} />
+                      <UserCard
+                        text={member.user.name ?? member.user.email}
+                        actionText="Reallocate"
+                      />
                     </li>
                   ))}
                 </ul>
