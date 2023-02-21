@@ -11,7 +11,7 @@ type Props = {
 
 export default function RoomAssignmentForm(props: Props) {
   const utils = trpc.useContext();
-  const { mutate } = trpc.member.upsert.useMutation({
+  const { mutate, isLoading } = trpc.member.upsert.useMutation({
     onSuccess: () => utils.room.getAll.invalidate(),
   });
 
@@ -23,6 +23,7 @@ export default function RoomAssignmentForm(props: Props) {
       fullWidth
       size="large"
       className="justify-center"
+      isLoading={isLoading}
       onClick={() =>
         !props.selected &&
         mutate({ roomId: props.roomId, campId: props.campId })
