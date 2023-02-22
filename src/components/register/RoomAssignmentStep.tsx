@@ -25,7 +25,7 @@ export default function RoomAssignmentStep({ campId }: Props) {
             />
           </div>
           <ul className="my-2 flex flex-col gap-2">
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {room.members.map((member) => (
                 <motion.li
                   key={member.id}

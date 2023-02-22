@@ -113,13 +113,6 @@ export default function PersonalInformationForm(props: Props) {
 
       <div className="mt-6 flex gap-2">
         <Button
-          text="Back"
-          type="button"
-          intent="secondary"
-          fullWidth
-          className="justify-center"
-        />
-        <Button
           {...props.buttonProps}
           text="Next"
           type="submit"
