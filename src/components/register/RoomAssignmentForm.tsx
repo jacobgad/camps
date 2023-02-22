@@ -13,7 +13,7 @@ type Props = {
 export default function RoomAssignmentForm(props: Props) {
   const utils = trpc.useContext();
   const { mutate, isLoading } = trpc.member.upsert.useMutation({
-    onSuccess: () => utils.room.getAll.invalidate(),
+    onSuccess: () => utils.room.getAllGender.invalidate(),
     onError: (error) => toast.error(error.message),
   });
 

@@ -17,7 +17,7 @@ type Props = {
 
 export default function RoomAssignmentStep(props: Props) {
   const session = useSession();
-  const { data } = trpc.room.getAll.useQuery({ campId: props.campId });
+  const { data } = trpc.room.getAllGender.useQuery({ campId: props.campId });
 
   const isAllocated = useMemo(() => {
     return !!data?.find((room) =>

@@ -32,6 +32,33 @@ export const roomRouter = router({
       });
     }),
 
+  getAllGender: protectedProcedure
+    .input(z.object({ campId: z.string().cuid() }))
+    .query(async ({ input, ctx }) => {
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session.user.id },
+      });
+
+      if (!user || !user.gender) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User does not exist or has not provided their gender",
+        });
+      }
+
+      return ctx.prisma.room.findMany({
+        where: { campId: input.campId, gender: user.gender },
+        orderBy: { name: "asc" },
+        include: {
+          members: {
+            include: {
+              user: { select: { name: true } },
+            },
+          },
+        },
+      });
+    }),
+
   get: protectedProcedure
     .input(
       z.object({
