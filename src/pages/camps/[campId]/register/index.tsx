@@ -7,8 +7,6 @@ import { toast } from "react-hot-toast";
 import { isAuthed } from "utils/auth";
 import { trpc } from "utils/trpc";
 import RoomAssignmentStep from "components/register/RoomAssignmentStep";
-import Button from "@ui/Button";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
 
 const stepInfo = [
   {
@@ -68,30 +66,14 @@ const Page: NextPage = () => {
           <PersonalInformationStep onComplete={() => setStepIdx(1)} />
         )}
 
-        {stepIdx === 1 && <RoomAssignmentStep campId={campId} />}
+        {stepIdx === 1 && (
+          <RoomAssignmentStep
+            campId={campId}
+            onBack={() => stepIdx > 0 && setStepIdx(stepIdx - 1)}
+            onComplete={() => stepIdx < 2 && setStepIdx(stepIdx + 1)}
+          />
+        )}
       </div>
-
-      {stepIdx > 0 && (
-        <div className="mt-6 flex gap-2">
-          <Button
-            text="Back"
-            type="button"
-            intent="secondary"
-            fullWidth
-            className="justify-center"
-            onClick={() => stepIdx > 0 && setStepIdx(stepIdx - 1)}
-          />
-
-          <Button
-            text={stepIdx < 2 ? "Next" : "Finish"}
-            type="button"
-            Icon={ArrowRightIcon}
-            fullWidth
-            className="justify-center"
-            onClick={() => stepIdx < 2 && setStepIdx(stepIdx + 1)}
-          />
-        </div>
-      )}
     </Layout>
   );
 };
