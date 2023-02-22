@@ -11,7 +11,7 @@ import RoomAssignmentForm from "./RoomAssignmentForm";
 
 type Props = {
   campId: Camp["id"];
-  onComplete: () => void;
+  onNext: () => void;
   onBack: () => void;
 };
 
@@ -83,7 +83,7 @@ export default function RoomAssignmentStep(props: Props) {
           fullWidth
           className="justify-center"
           disabled={!isAllocated}
-          onClick={props.onComplete}
+          onClick={props.onNext}
         />
       </div>
     </div>

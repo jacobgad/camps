@@ -39,7 +39,7 @@ export const itineraryRouter = router({
         where: { campId: input.campId },
         include: {
           options: {
-            include: { members: { select: { id: true } } },
+            include: { members: { select: { id: true, userId: true } } },
             orderBy: { name: "asc" },
           },
         },
@@ -220,6 +220,68 @@ export const itineraryRouter = router({
         });
 
         return { ...item, options };
+      });
+    }),
+
+  join: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const option = await ctx.prisma.itineraryOption.findUnique({
+        where: { id: input.id },
+        include: {
+          members: true,
+          itineraryItem: { include: { options: true } },
+        },
+      });
+
+      if (!option) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Itinerary option does not exist",
+        });
+      }
+
+      if (option.capacity <= option.members.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Itinerary option has reached capacity",
+        });
+      }
+
+      await Promise.all(
+        option.itineraryItem.options.map((opt) =>
+          ctx.prisma.itineraryOption.update({
+            where: { id: opt.id },
+            data: {
+              members: {
+                disconnect: {
+                  campId_userId: {
+                    campId: option.itineraryItem.campId,
+                    userId: ctx.session.user.id,
+                  },
+                },
+              },
+            },
+          })
+        )
+      );
+
+      return ctx.prisma.itineraryOption.update({
+        where: { id: input.id },
+        data: {
+          members: {
+            connect: {
+              campId_userId: {
+                campId: option.itineraryItem.campId,
+                userId: ctx.session.user.id,
+              },
+            },
+          },
+        },
       });
     }),
 

@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { isAuthed } from "utils/auth";
 import { trpc } from "utils/trpc";
 import RoomAssignmentStep from "components/register/RoomAssignmentStep";
+import ItineraryAssignmentStep from "components/register/ItineraryAssignmentStep";
 
 const stepInfo = [
   {
@@ -70,7 +71,15 @@ const Page: NextPage = () => {
           <RoomAssignmentStep
             campId={campId}
             onBack={() => stepIdx > 0 && setStepIdx(stepIdx - 1)}
-            onComplete={() => stepIdx < 2 && setStepIdx(stepIdx + 1)}
+            onNext={() => stepIdx < 2 && setStepIdx(stepIdx + 1)}
+          />
+        )}
+
+        {stepIdx === 2 && (
+          <ItineraryAssignmentStep
+            campId={campId}
+            onBack={() => stepIdx > 0 && setStepIdx(stepIdx - 1)}
+            onNext={() => router.push(`/camps/${campId}`)}
           />
         )}
       </div>
