@@ -70,7 +70,6 @@ export const roomRouter = router({
         where: { id: input.id },
         include: {
           members: {
-            where: { userId: ctx.session.user.id },
             include: { user: { select: { name: true, email: true } } },
           },
         },

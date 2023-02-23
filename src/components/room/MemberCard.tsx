@@ -71,21 +71,27 @@ function ReallocateRoomForm(props: ReallocateRoomFormProps) {
 
   return (
     <div className="flex h-full flex-col">
-      <RadioGroup<typeof props.rooms[number]>
-        options={props.rooms.filter((room) => room.id !== props.currentRoomId)}
-        value={props.rooms.find((room) => room.id === roomId)}
-        onChange={(room) => setRoomId(room.id)}
-        formatOption={(room) => ({
-          id: room.id,
-          label: room.name,
-          description: `Capacity ${room.members.length}/${room.capacity}`,
-          disabled: room.members.length >= room.capacity,
-        })}
-        className="flex-grow"
-      />
+      <div className="mb-6 flex-grow overflow-auto">
+        <RadioGroup<typeof props.rooms[number]>
+          options={props.rooms.filter(
+            (room) => room.id !== props.currentRoomId
+          )}
+          value={props.rooms.find((room) => room.id === roomId)}
+          onChange={(room) => setRoomId(room.id)}
+          formatOption={(room) => ({
+            id: room.id,
+            label: room.name,
+            description: `Capacity ${room.members.length}/${room.capacity}`,
+            disabled: room.members.length >= room.capacity,
+          })}
+          className="flex-grow"
+        />
+      </div>
+
       <Button
         text="Reallocate"
         isLoading={isLoading}
+        disabled={roomId === props.currentRoomId}
         onClick={() => mutate({ memberId: props.memberId, roomId })}
         className="justify-center"
         fullWidth

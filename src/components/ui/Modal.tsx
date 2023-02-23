@@ -41,7 +41,7 @@ export default function Modal(props: DialogProps) {
                   <Dialog.Description>{props.description}</Dialog.Description>
                 )}
 
-                <div className="flex-grow">{props.children}</div>
+                <div className="flex-grow overflow-auto">{props.children}</div>
               </Dialog.Panel>
             </div>
           </motion.div>
