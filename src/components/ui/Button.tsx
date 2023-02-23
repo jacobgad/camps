@@ -67,7 +67,9 @@ export default function Button({
       <span className={`flex ${isLoading && "opacity-0"}`}>
         {Icon && (
           <Icon
-            className={`-ml-1 mr-3 ${size === "small" ? "h-4 w-4" : "h-5 w-5"}`}
+            className={`-ml-1 mr-3 ${size === "small" && "h-4 w-4"} ${
+              size === undefined && "h-5 w-5"
+            } ${size === "large" && "h-6 w-6"}`}
             aria-hidden="true"
           />
         )}

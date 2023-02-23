@@ -1,12 +1,18 @@
 import type { NextPage } from "next";
 import GoogleLogoIcon from "@ui/icons/GoogleLogoIcon";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
-import { EnvelopeIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowLeftOnRectangleIcon,
+  EnvelopeIcon,
+} from "@heroicons/react/20/solid";
 import HeroLayout from "components/layout/HeroLayout";
+import Button from "@ui/Button";
+import Link from "next/link";
 
 const Home: NextPage = () => {
+  const session = useSession();
   const router = useRouter();
   const callbackUrl =
     (router.query.callbackUrl as string | undefined) ?? "/camps";
@@ -27,38 +33,64 @@ const Home: NextPage = () => {
         <p>Get started by signing in below</p>
       </div>
 
-      <button
-        onClick={() => {
-          toast.promise(signIn("google", { callbackUrl }), {
-            error: "Error signing in",
-            loading: "Loading...",
-            success: "Welcome",
-          });
-        }}
-        className="flex w-full items-center gap-4 rounded-lg border border-gray-700 p-4"
-      >
-        <GoogleLogoIcon />
-        <span className="text-lg font-medium text-white">
-          Sign In with Google
-        </span>
-      </button>
+      {session.status === "authenticated" && (
+        <>
+          <Link href="/camps">
+            <Button
+              text="My Camps"
+              size="large"
+              className="justify-center"
+              fullWidth
+            />
+          </Link>
 
-      <div className="inline-flex w-full items-center justify-center">
-        <hr className="my-8 h-px w-64 border-0 bg-gray-700" />
-        <span className="absolute left-1/2 -translate-x-1/2 bg-[#0D1522] px-3 font-medium text-gray-100">
-          OR
-        </span>
-      </div>
+          <Button
+            text="Sign Out"
+            size="large"
+            Icon={ArrowLeftOnRectangleIcon}
+            className="mt-6 justify-center"
+            intent="secondary"
+            fullWidth
+          />
+        </>
+      )}
 
-      <button
-        onClick={() => signIn("email", { callbackUrl })}
-        className="flex w-full items-center gap-4 rounded-lg border border-gray-700 p-4"
-      >
-        <EnvelopeIcon className="h-6 text-white" />
-        <span className="text-lg font-medium text-white">
-          Sign In with Email
-        </span>
-      </button>
+      {session.status !== "authenticated" && (
+        <>
+          <button
+            onClick={() => {
+              toast.promise(signIn("google", { callbackUrl }), {
+                error: "Error signing in",
+                loading: "Loading...",
+                success: "Welcome",
+              });
+            }}
+            className="flex w-full items-center gap-4 rounded-lg border border-gray-700 p-4"
+          >
+            <GoogleLogoIcon />
+            <span className="text-lg font-medium text-white">
+              Sign In with Google
+            </span>
+          </button>
+
+          <div className="inline-flex w-full items-center justify-center">
+            <hr className="my-8 h-px w-64 border-0 bg-gray-700" />
+            <span className="absolute left-1/2 -translate-x-1/2 bg-[#0D1522] px-3 font-medium text-gray-100">
+              OR
+            </span>
+          </div>
+
+          <button
+            onClick={() => signIn("email", { callbackUrl })}
+            className="flex w-full items-center gap-4 rounded-lg border border-gray-700 p-4"
+          >
+            <EnvelopeIcon className="h-6 text-white" />
+            <span className="text-lg font-medium text-white">
+              Sign In with Email
+            </span>
+          </button>
+        </>
+      )}
     </HeroLayout>
   );
 };
