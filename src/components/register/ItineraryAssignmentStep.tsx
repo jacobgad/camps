@@ -34,7 +34,7 @@ export default function ItineraryAssignmentStep(props: Props) {
 
   return (
     <div className="flex flex-grow flex-col">
-      <div className="mb-6 max-h-screen flex-grow overflow-auto">
+      <div className="mb-6 flex-grow overflow-auto">
         <StepInfo
           title="Your itinerary"
           description="Select the sessions you wish to attend below. We will put together a personalised itinerary for you."
@@ -66,7 +66,7 @@ export default function ItineraryAssignmentStep(props: Props) {
         </ol>
       </div>
 
-      <div className="flex gap-2">
+      <div className="sticky bottom-0 -mb-8 flex gap-2 bg-gray-50 py-6">
         <Button
           text="Back"
           type="button"
