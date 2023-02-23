@@ -28,7 +28,7 @@ export default function RoomAssignmentStep(props: Props) {
 
   return (
     <div className="flex flex-grow flex-col">
-      <div className="h-1 flex-grow overflow-auto">
+      <div className="max-h-screen flex-grow overflow-auto">
         <StepInfo
           title="Your room"
           description="Select which room you would like to stay in for the duration of the camp"

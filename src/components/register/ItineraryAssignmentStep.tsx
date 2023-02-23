@@ -34,7 +34,7 @@ export default function ItineraryAssignmentStep(props: Props) {
 
   return (
     <div className="flex flex-grow flex-col">
-      <div className="mb-6 h-1 flex-grow overflow-scroll">
+      <div className="mb-6 max-h-screen flex-grow overflow-auto">
         <StepInfo
           title="Your itinerary"
           description="Select the sessions you wish to attend below. We will put together a personalised itinerary for you."
