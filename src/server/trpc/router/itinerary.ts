@@ -202,7 +202,12 @@ export const itineraryRouter = router({
         const options = await Promise.all(
           inputOptions.map((option) =>
             tx.itineraryOption.upsert({
-              where: { id: option.id },
+              where: {
+                itineraryItemId_name: {
+                  itineraryItemId: input.id,
+                  name: option.name,
+                },
+              },
               update: option,
               create: { ...option, itineraryItemId: input.id },
             })

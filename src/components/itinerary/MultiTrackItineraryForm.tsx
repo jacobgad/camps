@@ -14,7 +14,7 @@ import {
   PlusCircleIcon,
   UserIcon,
 } from "@heroicons/react/20/solid";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useMemo } from "react";
 
 type DefaultValues = {
   campId: string;
@@ -44,14 +44,18 @@ const schema = z.object({
 export type MultiTrackSchema = z.infer<typeof schema>;
 
 export default function MultiTrackItineraryForm(props: Props) {
+  const defaultValues = useMemo(() => {
+    return {
+      ...props.defaultValues,
+      date: dateToInputDateTime(props.defaultValues.date),
+    };
+  }, [props.defaultValues]);
+
   const { register, formState, handleSubmit, control, reset } =
     useForm<MultiTrackSchema>({
       resolver: zodResolver(schema),
       mode: "onBlur",
-      defaultValues: {
-        ...props.defaultValues,
-        date: dateToInputDateTime(props.defaultValues.date),
-      },
+      defaultValues,
     });
 
   const { fields, append, remove } = useFieldArray({
@@ -60,8 +64,8 @@ export default function MultiTrackItineraryForm(props: Props) {
   });
 
   useEffect(() => {
-    if (!formState.isDirty) reset(props.defaultValues);
-  }, [formState.isDirty, props.defaultValues, reset]);
+    if (!formState.isDirty) reset(defaultValues);
+  }, [formState.isDirty, defaultValues, reset]);
 
   return (
     <form
