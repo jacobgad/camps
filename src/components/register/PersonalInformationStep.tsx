@@ -1,6 +1,7 @@
 import { toast } from "react-hot-toast";
 import { trpc } from "utils/trpc";
 import PersonalInformationForm from "./PersonalInformationForm";
+import StepInfo from "./StepInfo";
 
 type Props = {
   onComplete: () => void;
@@ -14,16 +15,22 @@ export default function PersonalInformationStep(props: Props) {
   });
 
   return (
-    <PersonalInformationForm
-      defaultValues={{
-        name: user.data?.name ?? undefined,
-        email: user.data?.email,
-        dob: user.data?.dob ?? undefined,
-        phone: user.data?.phone ?? undefined,
-        gender: user.data?.gender ?? undefined,
-      }}
-      onSubmit={mutate}
-      buttonProps={{ isLoading }}
-    />
+    <>
+      <StepInfo
+        title="Personal information"
+        description="Your information is only accessible to the event organisers, and will not be shared publicly."
+      />
+      <PersonalInformationForm
+        defaultValues={{
+          name: user.data?.name ?? undefined,
+          email: user.data?.email,
+          dob: user.data?.dob ?? undefined,
+          phone: user.data?.phone ?? undefined,
+          gender: user.data?.gender ?? undefined,
+        }}
+        onSubmit={mutate}
+        buttonProps={{ isLoading }}
+      />
+    </>
   );
 }

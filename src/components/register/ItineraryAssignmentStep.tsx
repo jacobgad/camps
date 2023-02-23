@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useMemo } from "react";
 import { trpc } from "utils/trpc";
 import ItineraryAssignmentForm from "./ItineraryAssignmentForm";
+import StepInfo from "./StepInfo";
 
 type Props = {
   campId: Camp["id"];
@@ -33,33 +34,39 @@ export default function ItineraryAssignmentStep(props: Props) {
 
   return (
     <div className="flex flex-grow flex-col">
-      <ol className="mb-6 flex-grow">
-        {multiTrackItems?.map((item, idx) => (
-          <li key={item.id}>
-            {idx !== 0 && <hr className="my-6" />}
-            <p className="mb-2">
-              <span className="mb-2 text-base font-bold">
-                {format(new Date(item.date), "iiii")}
-              </span>
-              <span className="mx-1 text-sm text-gray-400">&bull;</span>
-              <span className="mb-2 text-sm font-semibold tracking-wider text-gray-500">
-                {format(item.date, "h:mm aa")}
-              </span>
-            </p>
+      <div className="mb-6 h-0 flex-grow overflow-scroll">
+        <StepInfo
+          title="Your itinerary"
+          description="Select the sessions you wish to attend below. We will put together a personalised itinerary for you."
+        />
+        <ol className="flex-gro mb-6">
+          {multiTrackItems?.map((item, idx) => (
+            <li key={item.id}>
+              {idx !== 0 && <hr className="my-6" />}
+              <p className="mb-2">
+                <span className="mb-2 text-base font-bold">
+                  {format(new Date(item.date), "iiii")}
+                </span>
+                <span className="mx-1 text-sm text-gray-400">&bull;</span>
+                <span className="mb-2 text-sm font-semibold tracking-wider text-gray-500">
+                  {format(item.date, "h:mm aa")}
+                </span>
+              </p>
 
-            <ItineraryAssignmentForm
-              options={item.options}
-              selectedOption={item.options.find((option) =>
-                option.members.find(
-                  (member) => member.userId === session.data?.user?.id
-                )
-              )}
-            />
-          </li>
-        ))}
-      </ol>
+              <ItineraryAssignmentForm
+                options={item.options}
+                selectedOption={item.options.find((option) =>
+                  option.members.find(
+                    (member) => member.userId === session.data?.user?.id
+                  )
+                )}
+              />
+            </li>
+          ))}
+        </ol>
+      </div>
 
-      <div className="mt-6 flex gap-2">
+      <div className="flex gap-2">
         <Button
           text="Back"
           type="button"

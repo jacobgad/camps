@@ -9,24 +9,6 @@ import { trpc } from "utils/trpc";
 import RoomAssignmentStep from "components/register/RoomAssignmentStep";
 import ItineraryAssignmentStep from "components/register/ItineraryAssignmentStep";
 
-const stepInfo = [
-  {
-    title: "Personal information",
-    description:
-      "Your information is only accessible to the event organisers, and will not be shared publicly.",
-  },
-  {
-    title: "Your room",
-    description:
-      "Select which room you would like to stay in for the duration of the camp",
-  },
-  {
-    title: "Your itinerary",
-    description:
-      "Select the sessions you wish to attend below. We will put together a personalised itinerary for you.",
-  },
-];
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
   if (redirect) return redirect;
@@ -47,7 +29,7 @@ const Page: NextPage = () => {
 
   return (
     <Layout>
-      <header className="-mx-4 -mt-8 bg-indigo-600 px-4 py-8 text-indigo-50">
+      <header className="-mx-4 -mt-8 mb-8 bg-indigo-600 px-4 py-8 text-indigo-50">
         <h1 className="h-8 text-2xl font-extrabold tracking-tight">
           {camp.data?.name}
         </h1>
@@ -55,12 +37,6 @@ const Page: NextPage = () => {
           {camp.data?.organiser}
         </p>
       </header>
-      <h2 className="mt-8 text-lg font-medium text-gray-900">
-        {stepInfo[stepIdx]?.title}
-      </h2>
-      <p className="mt-1 mb-6 text-sm font-normal text-gray-500">
-        {stepInfo[stepIdx]?.description}
-      </p>
 
       <div className="flex flex-grow flex-col">
         {stepIdx === 0 && (
