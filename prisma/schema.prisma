@@ -62,8 +62,6 @@ model ItineraryOption {
   members         Member[]
   itineraryItem   ItineraryItem @relation(fields: [itineraryItemId], references: [id], onDelete: Cascade)
   itineraryItemId Int
-
-  @@unique([itineraryItemId, name])
 }
 
 model Room {

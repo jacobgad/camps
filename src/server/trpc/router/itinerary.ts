@@ -199,19 +199,26 @@ export const itineraryRouter = router({
         });
 
         //update or create new or updated options
-        const options = await Promise.all(
-          inputOptions.map((option) =>
-            tx.itineraryOption.upsert({
-              where: {
-                itineraryItemId_name: {
-                  itineraryItemId: input.id,
-                  name: option.name,
-                },
-              },
-              update: option,
-              create: { ...option, itineraryItemId: input.id },
-            })
-          )
+        await Promise.all(
+          inputOptions
+            .filter((opt) => opt.id !== undefined)
+            .map((option) =>
+              tx.itineraryOption.update({
+                where: { id: option.id },
+                data: { ...option, itineraryItemId: input.id },
+              })
+            )
+        );
+
+        //update or create new or updated options
+        await Promise.all(
+          inputOptions
+            .filter((opt) => opt.id === undefined)
+            .map((option) =>
+              tx.itineraryOption.create({
+                data: { ...option, itineraryItemId: input.id },
+              })
+            )
         );
 
         //Delete options that have been removed
@@ -224,7 +231,23 @@ export const itineraryRouter = router({
           where: { id: { in: optionIdsToBeDeleted } },
         });
 
-        return { ...item, options };
+        return ctx.prisma.itineraryItem.findUnique({
+          where: { id: input.id },
+          include: {
+            options: {
+              include: {
+                members: {
+                  select: {
+                    id: true,
+                    user: { select: { name: true, email: true } },
+                  },
+                  orderBy: { user: { name: "asc" } },
+                },
+              },
+              orderBy: { name: "asc" },
+            },
+          },
+        });
       });
     }),
 
