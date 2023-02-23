@@ -1,11 +1,5 @@
 import type { ItineraryItem, ItineraryOption } from "@prisma/client";
-import {
-  format,
-  isSameDay,
-  isToday,
-  isWithinInterval,
-  startOfDay,
-} from "date-fns";
+import { format, isSameDay, isToday, startOfDay } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import { groupBy } from "utils/itinerary";
 import {
@@ -22,7 +16,9 @@ type Props = {
 };
 
 export default function Itinerary({ itineraryItems }: Props) {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    itineraryItems[0]?.date ?? new Date()
+  );
 
   const groupedItinerary = useMemo(() => {
     return groupBy(itineraryItems, (item) =>
@@ -37,16 +33,9 @@ export default function Itinerary({ itineraryItems }: Props) {
   }, [groupedItinerary]);
 
   useEffect(() => {
-    if (dates.length < 2) return;
-    if (
-      !isWithinInterval(selectedDate, {
-        start: dates.at(0) as Date,
-        end: dates.at(-1) as Date,
-      })
-    ) {
-      setSelectedDate(dates.at(0) as Date);
-    }
-  }, [dates, selectedDate]);
+    const date = dates.find((date) => isSameDay(date, new Date()));
+    if (date) setSelectedDate(date);
+  }, [dates]);
 
   const itinerary = groupedItinerary[selectedDate.toISOString()] ?? [];
 

@@ -43,7 +43,7 @@ export const memberRouter = router({
 
       return {
         ...member,
-        team: sycTeams.find((user) => user.phone === member.user.phone)?.team,
+        team: sycTeams.find((user) => user.phone === member.user.phone),
       };
     }),
 

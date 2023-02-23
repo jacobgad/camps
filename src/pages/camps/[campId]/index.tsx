@@ -48,11 +48,11 @@ const Page: NextPage = () => {
         <Card className="flex items-center justify-between bg-white">
           <span className="flex items-center gap-2 ">
             <UserGroupIcon className="h-8" />
-            {data?.team ?? "Team not found"}
+            {data?.team?.name ?? "Team not found"}
           </span>
           <div
             className="h-8 w-8 rounded-full"
-            style={{ backgroundColor: data?.team }}
+            style={{ backgroundColor: data?.team?.color }}
           />
         </Card>
       </div>
