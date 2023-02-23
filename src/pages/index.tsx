@@ -50,16 +50,9 @@ const Home: NextPage = () => {
         </span>
       </div>
 
-      <input
-        type="email"
-        name="email"
-        id="email"
-        placeholder="Email"
-        className="w-full rounded py-2 px-4"
-      />
       <button
         onClick={() => signIn("email", { callbackUrl })}
-        className="mt-4 flex w-full items-center gap-4 rounded-lg border border-gray-700 p-4"
+        className="flex w-full items-center gap-4 rounded-lg border border-gray-700 p-4"
       >
         <EnvelopeIcon className="h-6 text-white" />
         <span className="text-lg font-medium text-white">
