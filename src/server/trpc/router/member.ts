@@ -15,7 +15,14 @@ export const memberRouter = router({
           campId_userId: { userId: ctx.session.user.id, campId: input.campId },
         },
         include: {
-          camp: { include: { itineraryItems: { include: { options: true } } } },
+          camp: {
+            include: {
+              itineraryItems: {
+                include: { options: true },
+                orderBy: { date: "asc" },
+              },
+            },
+          },
           user: true,
           room: true,
         },
