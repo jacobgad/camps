@@ -48,7 +48,7 @@ const Page: NextPage = () => {
         <Card className="flex items-center justify-between bg-white">
           <span className="flex items-center gap-2 ">
             <UserGroupIcon className="h-8" />
-            {data?.team?.name ?? "Team not found"}
+            Team: {data?.team?.name ?? "Not found"}
           </span>
           <div
             className="h-8 w-8 rounded-full"
