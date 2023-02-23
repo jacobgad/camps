@@ -1,6 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
 import type { Camp } from "@prisma/client";
 import {
+  ArrowLeftOnRectangleIcon,
   ClipboardDocumentIcon,
   PlusCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -11,6 +12,7 @@ import Link from "next/link";
 import { isAuthed } from "utils/auth";
 import { trpc } from "../../utils/trpc";
 import { toast } from "react-hot-toast";
+import { signOut } from "next-auth/react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -88,6 +90,15 @@ const Camps: NextPage = () => {
           </li>
         ))}
       </ul>
+
+      <Button
+        text="Sign Out"
+        fullWidth
+        className="mt-6 justify-center"
+        Icon={ArrowLeftOnRectangleIcon}
+        intent="secondary"
+        onClick={() => signOut()}
+      />
     </HeroLayout>
   );
 };
