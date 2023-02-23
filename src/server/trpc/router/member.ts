@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { sycTeams } from "utils/sycTeams";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
@@ -9,8 +10,8 @@ export const memberRouter = router({
         campId: z.string().cuid(),
       })
     )
-    .query(({ input, ctx }) => {
-      return ctx.prisma.member.findUnique({
+    .query(async ({ input, ctx }) => {
+      const member = await ctx.prisma.member.findUnique({
         where: {
           campId_userId: { userId: ctx.session.user.id, campId: input.campId },
         },
@@ -33,6 +34,17 @@ export const memberRouter = router({
           room: true,
         },
       });
+
+      if (!member)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "member does not exist",
+        });
+
+      return {
+        ...member,
+        team: sycTeams.find((user) => user.phone === member.user.phone)?.team,
+      };
     }),
 
   upsert: protectedProcedure
