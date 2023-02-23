@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import GoogleLogoIcon from "@ui/icons/GoogleLogoIcon";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
 import {
@@ -51,6 +51,7 @@ const Home: NextPage = () => {
             className="mt-6 justify-center"
             intent="secondary"
             fullWidth
+            onClick={() => signOut()}
           />
         </>
       )}
