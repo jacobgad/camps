@@ -5,8 +5,8 @@ import { trpc } from "utils/trpc";
 import Layout from "components/layout/Layout";
 import Itinerary from "components/Dashboard/Itinerary";
 import { toast } from "react-hot-toast";
-import Card from "@ui/cards/Card";
-import { KeyIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import RoomCard from "components/Dashboard/RoomCard";
+import TeamCard from "components/Dashboard/TeamCard";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Page: NextPage = () => {
   const router = useRouter();
   const campId = router.query.campId as string;
-  const { data } = trpc.member.get.useQuery(
+  const { data, isLoading } = trpc.member.get.useQuery(
     { campId },
     {
       onError: (error) => toast.error(error.message),
@@ -27,37 +27,26 @@ const Page: NextPage = () => {
   return (
     <Layout variant="dark">
       <div className="mb-6">
-        <h1 className="text-2xl text-gray-100">{data?.camp.name}</h1>
+        <h1 className="text-2xl text-gray-100">
+          {data?.camp.name}
+          {isLoading && "Loading..."}
+        </h1>
         <p className="mt-1 text-xs font-medium uppercase tracking-wide text-gray-400">
           {data?.camp.organiser}
         </p>
-        <p className="mt-4 text-gray-400">Welcome {data?.user.name}</p>
+        <p className="mt-4 text-gray-400">
+          {data?.user && `Welcome ${data.user.name ?? data.user.email}`}
+        </p>
       </div>
 
       <div className="mb-4 space-y-4">
-        <Card className="flex items-center justify-between bg-white">
-          <span className="flex items-center gap-2 ">
-            <KeyIcon className="h-8" />
-            {data?.room.name ?? "Room not assigned"}
-          </span>
-          {/* <Link href="rooms/edit" className="text font-medium text-indigo-600">
-            Edit
-          </Link> */}
-        </Card>
-
-        <Card className="flex items-center justify-between bg-white">
-          <span className="flex items-center gap-2 ">
-            <UserGroupIcon className="h-8" />
-            Team: {data?.team?.name ?? "Not found"}
-          </span>
-          <div
-            className="h-8 w-8 rounded-full"
-            style={{ backgroundColor: data?.team?.color }}
-          />
-        </Card>
+        {data?.room && <RoomCard room={data.room} />}
+        {data?.team && <TeamCard team={data.team} />}
       </div>
 
-      <Itinerary itineraryItems={data?.camp.itineraryItems ?? []} />
+      {data?.camp.itineraryItems && (
+        <Itinerary itineraryItems={data.camp.itineraryItems} />
+      )}
     </Layout>
   );
 };
