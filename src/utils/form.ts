@@ -27,4 +27,7 @@ export function dateToInputDateTime(date?: Maybe<Date>) {
 
 export const phoneSchema = z
   .string()
-  .regex(/^(\+61)4\d{8}$/, "Not a valid AU mobile number");
+  .regex(
+    /^(\+61)4\d{8}$/,
+    "Not a valid AU mobile number, please use +614 format and remove spaces"
+  );
