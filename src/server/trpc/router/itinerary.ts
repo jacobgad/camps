@@ -54,30 +54,30 @@ export const itineraryRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const user = await ctx.prisma.user.findFirst({
-        where: {
-          id: ctx.session.user.id,
-          OR: [
-            {
-              camps: {
-                some: { organisers: { some: { id: ctx.session.user.id } } },
-              },
-            },
-            {
-              camps: {
-                some: { members: { some: { userId: ctx.session.user.id } } },
-              },
-            },
-          ],
-        },
-      });
+      // const user = await ctx.prisma.user.findFirst({
+      //   where: {
+      //     id: ctx.session.user.id,
+      //     OR: [
+      //       {
+      //         camps: {
+      //           some: { organisers: { some: { id: ctx.session.user.id } } },
+      //         },
+      //       },
+      //       {
+      //         camps: {
+      //           some: { members: { some: { userId: ctx.session.user.id } } },
+      //         },
+      //       },
+      //     ],
+      //   },
+      // });
 
-      if (!user) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "You are not associated with this camp",
-        });
-      }
+      // if (!user) {
+      //   throw new TRPCError({
+      //     code: "UNAUTHORIZED",
+      //     message: "You are not associated with this camp",
+      //   });
+      // }
 
       return ctx.prisma.itineraryItem.findUnique({
         where: { id: input.id },

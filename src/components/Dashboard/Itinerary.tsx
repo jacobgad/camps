@@ -84,7 +84,8 @@ export default function Itinerary({ itineraryItems }: Props) {
                   {format(item.date, "h:mm a")}
                 </p>
                 <p className="mt-1 text-sm font-semibold text-gray-900">
-                  {item.options.at(0)?.name ?? item.name}
+                  {item.name}
+                  {item.options.at(0)?.name && `- ${item.options.at(0)?.name}`}
                 </p>
                 <div className="mt-2 space-y-1 text-sm font-normal text-gray-500">
                   {(item.options.at(0)?.description ?? item.description) && (
@@ -93,7 +94,7 @@ export default function Itinerary({ itineraryItems }: Props) {
                       {item.options.at(0)?.description ?? item.description}
                     </p>
                   )}
-                  {item.location && (
+                  {(item.options.at(0)?.location ?? item.location) && (
                     <p className="flex items-center gap-1">
                       <MapPinIcon className="h-4" />
                       {item.options.at(0)?.location ?? item.location}

@@ -18,7 +18,13 @@ export const memberRouter = router({
           camp: {
             include: {
               itineraryItems: {
-                include: { options: true },
+                include: {
+                  options: {
+                    where: {
+                      members: { some: { userId: ctx.session.user.id } },
+                    },
+                  },
+                },
                 orderBy: { date: "asc" },
               },
             },
