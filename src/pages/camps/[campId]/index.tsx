@@ -8,6 +8,8 @@ import { toast } from "react-hot-toast";
 import RoomCard from "components/Dashboard/RoomCard";
 import TeamCard from "components/Dashboard/TeamCard";
 import TeamScoreBoard from "components/Dashboard/TeamScoreBoard";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -18,7 +20,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Page: NextPage = () => {
   const router = useRouter();
   const campId = router.query.campId as string;
+  const [tabIdx, setTabIdx] = useState(0);
+
   const { data, isLoading } = trpc.member.get.useQuery(
+    { campId },
+    {
+      onError: (error) => toast.error(error.message),
+    }
+  );
+
+  const teams = trpc.team.getAll.useQuery(
     { campId },
     {
       onError: (error) => toast.error(error.message),
@@ -27,27 +38,45 @@ const Page: NextPage = () => {
 
   return (
     <Layout variant="dark">
-      <div className="mb-6">
-        <h1 className="text-2xl text-gray-100">
+      <div className="mb-4">
+        <h1 className="h-8 text-2xl text-gray-100">
           {data?.camp.name}
           {isLoading && "Loading..."}
         </h1>
-        <p className="mt-1 text-xs font-medium uppercase tracking-wide text-gray-400">
+        <p className="mt-1 h-4 text-xs font-medium uppercase tracking-wide text-gray-400">
           {data?.camp.organiser}
         </p>
-        <p className="mt-4 text-gray-400">
+        <p className="mt-4 h-4 text-gray-400">
           {data?.user && `Welcome ${data.user.name ?? data.user.email}`}
         </p>
       </div>
 
-      <div className="mb-4 space-y-4">
-        {data?.room && <RoomCard room={data.room} />}
-        {data?.team && <TeamCard team={data.team} />}
-        <TeamScoreBoard />
+      <div className="mb-6 flex gap-1 overflow-hidden rounded bg-gray-100 p-1">
+        {["My Info", "My Itinerary"].map((label, idx) => (
+          <button
+            key={idx}
+            onClick={() => setTabIdx(idx)}
+            className={`transition, flex-1 rounded py-2 shadow ${
+              tabIdx === idx ? "bg-indigo-700 text-white" : "bg-white"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
-      {data?.camp.itineraryItems && (
+      {tabIdx === 0 && (
+        <motion.div className="mb-4 space-y-4">
+          {data?.room && <RoomCard room={data.room} />}
+          {data?.team && <TeamCard team={data.team} />}
+          {teams?.data && <TeamScoreBoard teams={teams.data} />}
+        </motion.div>
+      )}
+
+      {tabIdx === 1 && data?.camp.itineraryItems && (
+        // <motion.div>
         <Itinerary itineraryItems={data.camp.itineraryItems} />
+        // </motion.div>
       )}
     </Layout>
   );

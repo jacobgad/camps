@@ -52,6 +52,7 @@ export const teamRouter = router({
         name: z.string().min(3),
         color: z.string(),
         campId: z.string().cuid(),
+        points: z.number().int(),
       })
     )
     .mutation(async ({ input, ctx }) => {
