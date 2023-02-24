@@ -25,6 +25,7 @@ model Camp {
   Room           Room[]
   members        Member[]
   organisers     User[]
+  teams          Team[]
 }
 
 model Member {
@@ -36,6 +37,8 @@ model Member {
   itineraryOptions ItineraryOption[]
   room             Room              @relation(fields: [roomId], references: [id])
   roomId           Int
+  team             Team?             @relation(fields: [teamId], references: [id])
+  teamId           Int?
 
   @@unique([campId, userId])
 }
@@ -72,6 +75,18 @@ model Room {
   camp     Camp     @relation(fields: [campId], references: [id])
   campId   String
   members  Member[]
+
+  @@unique([name, campId])
+}
+
+model Team {
+  id      Int      @id @default(autoincrement())
+  name    String
+  color   String
+  points  Int      @default(0)
+  members Member[]
+  camp    Camp     @relation(fields: [campId], references: [id])
+  campId  String
 
   @@unique([name, campId])
 }

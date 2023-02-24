@@ -7,6 +7,7 @@ import Itinerary from "components/Dashboard/Itinerary";
 import { toast } from "react-hot-toast";
 import RoomCard from "components/Dashboard/RoomCard";
 import TeamCard from "components/Dashboard/TeamCard";
+import TeamScoreBoard from "components/Dashboard/TeamScoreBoard";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -42,6 +43,7 @@ const Page: NextPage = () => {
       <div className="mb-4 space-y-4">
         {data?.room && <RoomCard room={data.room} />}
         {data?.team && <TeamCard team={data.team} />}
+        <TeamScoreBoard />
       </div>
 
       {data?.camp.itineraryItems && (
