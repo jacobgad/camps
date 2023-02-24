@@ -17,6 +17,7 @@ const schema = z.object({
   name: z.string().min(3),
   capacity: z.number().min(1),
   campId: z.string().cuid(),
+  code: z.string().optional().nullable(),
   gender: z.enum(["male", "female"]),
 });
 type Schema = z.infer<typeof schema>;
@@ -45,6 +46,12 @@ export default function RoomForm(props: Props) {
           type="number"
           Icon={HashtagIcon}
           {...register("capacity", { valueAsNumber: true })}
+        />
+        <Input
+          label="Room Code"
+          type="text"
+          helperText="Optional"
+          {...register("code")}
         />
       </div>
 

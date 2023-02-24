@@ -51,7 +51,7 @@ export default function MemberCard({ member }: Props) {
 
 type ReallocateRoomFormProps = {
   memberId: Member["id"];
-  rooms: (Room & {
+  rooms: (Omit<Room, "code"> & {
     members: Member[];
   })[];
   currentRoomId: number;

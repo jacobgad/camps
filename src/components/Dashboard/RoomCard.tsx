@@ -13,9 +13,9 @@ export default function RoomCard({ room }: Props) {
         <KeyIcon className="h-8" />
         {room.name}
       </span>
-      {/* <Link href="rooms/edit" className="text font-medium text-indigo-600">
-            Edit
-          </Link> */}
+      <span className="text font-medium text-indigo-600">
+        Code: {room.code}
+      </span>
     </Card>
   );
 }

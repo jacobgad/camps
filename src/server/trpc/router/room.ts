@@ -22,7 +22,12 @@ export const roomRouter = router({
       return ctx.prisma.room.findMany({
         where: { campId: input.campId },
         orderBy: { name: "asc" },
-        include: {
+        select: {
+          id: true,
+          name: true,
+          campId: true,
+          capacity: true,
+          gender: true,
           members: {
             include: {
               user: { select: { name: true } },
@@ -82,6 +87,7 @@ export const roomRouter = router({
         id: z.number(),
         name: z.string().min(3),
         capacity: z.number().min(1),
+        code: z.string().optional().nullable(),
         gender: z.enum(["male", "female"]),
       })
     )

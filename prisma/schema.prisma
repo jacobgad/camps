@@ -75,6 +75,7 @@ model Room {
   id       Int      @id @default(autoincrement())
   name     String
   capacity Int
+  code     String?
   gender   Gender
   camp     Camp     @relation(fields: [campId], references: [id])
   campId   String
