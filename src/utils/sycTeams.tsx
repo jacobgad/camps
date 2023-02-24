@@ -26,7 +26,7 @@ export const sycTeams = [
   { name: "Red", color: "red", phone: "+61457098154" },
   { name: "Red", color: "red", phone: "+61410939531" },
   { name: "Red", color: "red", phone: "+61438717283" },
-  { name: "Red", color: "red", phone: "+61450564005" },
+  { name: "Red", color: "red", phone: "+61421192264" },
   { name: "Red", color: "red", phone: "+61472564845" },
   { name: "Red", color: "red", phone: "+61425184392" },
   { name: "Red", color: "red", phone: "+61450484611" },
