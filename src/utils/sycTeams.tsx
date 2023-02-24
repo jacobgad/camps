@@ -48,7 +48,7 @@ export const sycTeams = [
   { name: "Pink", color: "pink", phone: "+61403000252" },
   { name: "Pink", color: "pink", phone: "+61403166295" },
   { name: "Pink", color: "pink", phone: "+61430999053" },
-  { name: "Pink", color: "pink", phone: "+61469009456" },
+  { name: "Pink", color: "pink", phone: "+61421279980" },
   { name: "Pink", color: "pink", phone: "+61411601377" },
   { name: "Pink", color: "pink", phone: "+61420447105" },
   { name: "Pink", color: "pink", phone: "+61450233662" },
@@ -352,7 +352,6 @@ export const sycTeams = [
   { name: "Yellow", color: "yellow", phone: "+61416338786" },
   { name: "Yellow", color: "yellow", phone: "+61468932430" },
   { name: "Yellow", color: "yellow", phone: "+61406464571" },
-  { name: "Yellow", color: "yellow", phone: "0" },
   { name: "Yellow", color: "yellow", phone: "+61433110562" },
   { name: "Yellow", color: "yellow", phone: "+61435769039" },
 ];
