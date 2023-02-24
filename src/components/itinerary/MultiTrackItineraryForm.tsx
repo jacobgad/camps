@@ -9,6 +9,7 @@ import { z } from "zod";
 import DeleteItineraryItemButton from "./DeleteItineraryItemButton";
 import ButtonField from "@ui/ButtonField";
 import {
+  LinkIcon,
   MapPinIcon,
   MinusCircleIcon,
   PlusCircleIcon,
@@ -38,6 +39,8 @@ const schema = z.object({
       capacity: z.number().positive(),
       description: z.string().optional().nullable(),
       location: z.string().optional().nullable(),
+      linkName: z.string().optional().nullable(),
+      linkUrl: z.string().optional().nullable(),
     })
   ),
 });
@@ -119,6 +122,26 @@ export default function MultiTrackItineraryForm(props: Props) {
                 buttonProps={{
                   text: "Add location",
                   Icon: MapPinIcon,
+                  className: "-mt-2",
+                }}
+              />
+              <ButtonField
+                label="Link Name"
+                helperText="optional"
+                {...register(`options.${idx}.linkName`)}
+                buttonProps={{
+                  text: "Add link name",
+                  Icon: LinkIcon,
+                  className: "-mt-2",
+                }}
+              />
+              <ButtonField
+                label="Location"
+                helperText="optional"
+                {...register(`options.${idx}.linkUrl`)}
+                buttonProps={{
+                  text: "Add link URL",
+                  Icon: LinkIcon,
                   className: "-mt-2",
                 }}
               />

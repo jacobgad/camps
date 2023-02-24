@@ -9,7 +9,6 @@ import RoomCard from "components/Dashboard/RoomCard";
 import TeamCard from "components/Dashboard/TeamCard";
 import TeamScoreBoard from "components/Dashboard/TeamScoreBoard";
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -25,7 +24,12 @@ const Page: NextPage = () => {
   const { data, isLoading } = trpc.member.get.useQuery(
     { campId },
     {
-      onError: (error) => toast.error(error.message),
+      onError: (error) => {
+        toast.error(error.message);
+        if (error.data?.code === "BAD_REQUEST") {
+          router.push(`/camps/${campId}/register`);
+        }
+      },
     }
   );
 
@@ -66,17 +70,15 @@ const Page: NextPage = () => {
       </div>
 
       {tabIdx === 0 && (
-        <motion.div className="mb-4 space-y-4">
+        <div className="mb-4 space-y-4">
           {data?.room && <RoomCard room={data.room} />}
           {data?.team && <TeamCard team={data.team} />}
           {teams?.data && <TeamScoreBoard teams={teams.data} />}
-        </motion.div>
+        </div>
       )}
 
       {tabIdx === 1 && data?.camp.itineraryItems && (
-        // <motion.div>
         <Itinerary itineraryItems={data.camp.itineraryItems} />
-        // </motion.div>
       )}
     </Layout>
   );

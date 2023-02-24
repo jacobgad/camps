@@ -52,6 +52,8 @@ model ItineraryItem {
   camp        Camp              @relation(fields: [campId], references: [id])
   campId      String
   options     ItineraryOption[]
+  linkUrl     String?
+  linkName    String?
 
   @@unique([campId, date])
 }
@@ -65,6 +67,8 @@ model ItineraryOption {
   members         Member[]
   itineraryItem   ItineraryItem @relation(fields: [itineraryItemId], references: [id], onDelete: Cascade)
   itineraryItemId Int
+  linkUrl         String?
+  linkName        String?
 }
 
 model Room {

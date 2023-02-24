@@ -1,10 +1,10 @@
 import type { ButtonProps } from "@ui/Button";
 import { UserIcon, MapPinIcon } from "@heroicons/react/20/solid";
-import { CalendarIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon, LinkIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@ui/Button";
 import Input from "@ui/Input";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { dateToInputDateTime } from "utils/form";
 import { z } from "zod";
@@ -26,6 +26,8 @@ const schema = z.object({
   campId: z.string().cuid(),
   description: z.string().optional().nullable(),
   location: z.string().optional().nullable(),
+  linkName: z.string().optional().nullable(),
+  linkUrl: z.string().optional().nullable(),
   date: z.date(),
 });
 type Schema = z.infer<typeof schema>;
@@ -37,15 +39,28 @@ export default function SingleTrackItineraryForm(props: Props) {
   const [showLocation, setShowLocation] = useState(
     !!props.defaultValues.location
   );
+  const [showLink, setShowLink] = useState(!!props.defaultValues.linkUrl);
 
-  const { register, formState, handleSubmit } = useForm<Schema>({
-    resolver: zodResolver(schema),
-    mode: "onTouched",
-    defaultValues: {
+  const defaultValues = useMemo(() => {
+    return {
       ...props.defaultValues,
       date: dateToInputDateTime(props.defaultValues.date),
-    },
+    };
+  }, [props.defaultValues]);
+
+  const { register, formState, handleSubmit, reset } = useForm<Schema>({
+    resolver: zodResolver(schema),
+    mode: "onTouched",
+    defaultValues,
   });
+
+  useEffect(() => {
+    if (formState.isDirty) return;
+    reset(defaultValues);
+    setShowDescription(!!defaultValues.description);
+    setShowLocation(!!defaultValues.location);
+    setShowLink(!!defaultValues.linkUrl);
+  }, [defaultValues, formState.isDirty, reset]);
 
   return (
     <form
@@ -97,6 +112,35 @@ export default function SingleTrackItineraryForm(props: Props) {
             size="small"
             Icon={MapPinIcon}
             onClick={() => setShowLocation(true)}
+            className="-mt-1"
+          />
+        )}
+
+        {showLink ? (
+          <>
+            <Input
+              label="Link Name"
+              helperText="optional"
+              Icon={MapPinIcon}
+              {...register("linkName")}
+              error={formState.errors.location?.message}
+            />
+
+            <Input
+              label="Link URL"
+              helperText="optional"
+              Icon={MapPinIcon}
+              {...register("linkUrl")}
+              error={formState.errors.location?.message}
+            />
+          </>
+        ) : (
+          <Button
+            text="Add Link"
+            intent="secondary"
+            size="small"
+            Icon={LinkIcon}
+            onClick={() => setShowLink(true)}
             className="-mt-1"
           />
         )}

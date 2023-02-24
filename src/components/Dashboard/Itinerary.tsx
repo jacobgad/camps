@@ -8,6 +8,7 @@ import {
   MapPinIcon,
 } from "@heroicons/react/24/outline";
 import Card from "@ui/cards/Card";
+import Button from "@ui/Button";
 
 type Props = {
   itineraryItems: (ItineraryItem & {
@@ -87,6 +88,28 @@ export default function Itinerary({ itineraryItems }: Props) {
                     <p className="flex items-center gap-1">
                       <MapPinIcon className="h-4" />
                       {item.options.at(0)?.location ?? item.location}
+                    </p>
+                  )}
+                  {(item.options.at(0)?.linkUrl ?? item.linkUrl) && (
+                    <p className="flex items-center gap-1">
+                      <a
+                        href={item.options.at(0)?.linkUrl ?? item.linkUrl ?? ""}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-full"
+                      >
+                        <Button
+                          intent="secondary"
+                          size="small"
+                          fullWidth
+                          className="justify-center"
+                          text={
+                            item.options.at(0)?.linkName ??
+                            item.linkName ??
+                            "Link"
+                          }
+                        />
+                      </a>
                     </p>
                   )}
                 </div>

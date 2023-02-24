@@ -106,6 +106,8 @@ export const itineraryRouter = router({
         date: z.date(),
         description: z.string().optional().nullable(),
         location: z.string().optional().nullable(),
+        linkName: z.string().optional().nullable(),
+        linkUrl: z.string().optional().nullable(),
         options: z
           .array(
             z.object({
@@ -113,6 +115,8 @@ export const itineraryRouter = router({
               capacity: z.number().positive(),
               description: z.string().optional().nullable(),
               location: z.string().optional().nullable(),
+              linkName: z.string().optional().nullable(),
+              linkUrl: z.string().optional().nullable(),
             })
           )
           .optional(),
@@ -155,6 +159,8 @@ export const itineraryRouter = router({
         date: z.date(),
         description: z.string().optional().nullable(),
         location: z.string().optional().nullable(),
+        linkName: z.string().optional().nullable(),
+        linkUrl: z.string().optional().nullable(),
         options: z
           .array(
             z.object({
@@ -163,6 +169,8 @@ export const itineraryRouter = router({
               capacity: z.number().positive(),
               description: z.string().optional().nullable(),
               location: z.string().optional().nullable(),
+              linkName: z.string().optional().nullable(),
+              linkUrl: z.string().optional().nullable(),
             })
           )
           .optional(),
