@@ -9,6 +9,7 @@ import RoomCard from "components/Dashboard/RoomCard";
 import TeamCard from "components/Dashboard/TeamCard";
 import TeamScoreBoard from "components/Dashboard/TeamScoreBoard";
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -69,17 +70,34 @@ const Page: NextPage = () => {
         ))}
       </div>
 
-      {tabIdx === 0 && (
-        <div className="mb-4 space-y-4">
-          {data?.room && <RoomCard room={data.room} />}
-          {data?.team && <TeamCard team={data.team} />}
-          {teams?.data && <TeamScoreBoard teams={teams.data} />}
-        </div>
-      )}
+      <AnimatePresence mode="popLayout">
+        {tabIdx === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="mb-4 space-y-4"
+          >
+            {data?.room && <RoomCard room={data.room} />}
+            {data?.team && <TeamCard team={data.team} />}
+            {teams?.data && <TeamScoreBoard teams={teams.data} />}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {tabIdx === 1 && data?.camp.itineraryItems && (
-        <Itinerary itineraryItems={data.camp.itineraryItems} />
-      )}
+      <AnimatePresence mode="popLayout">
+        {tabIdx === 1 && data?.camp.itineraryItems && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            <Itinerary itineraryItems={data.camp.itineraryItems} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Layout>
   );
 };
