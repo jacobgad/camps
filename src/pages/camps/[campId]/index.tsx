@@ -44,14 +44,14 @@ const Page: NextPage = () => {
   return (
     <Layout variant="dark">
       <div className="mb-4">
-        <h1 className="h-8 text-2xl text-gray-100">
+        <h1 className="min-h-8 text-2xl text-gray-100">
           {data?.camp.name}
           {isLoading && "Loading..."}
         </h1>
-        <p className="mt-1 h-4 text-xs font-medium uppercase tracking-wide text-gray-400">
+        <p className="mt-1 min-h-4 text-xs font-medium uppercase tracking-wide text-gray-400">
           {data?.camp.organiser}
         </p>
-        <p className="mt-4 h-4 text-gray-400">
+        <p className="mt-4 min-h-4 text-gray-400">
           {data?.user && `Welcome ${data.user.name ?? data.user.email}`}
         </p>
       </div>
