@@ -30,10 +30,10 @@ const Page: NextPage = () => {
   return (
     <Layout>
       <header className="-mx-4 -mt-8 mb-8 bg-indigo-600 px-4 py-8 text-indigo-50">
-        <h1 className="h-8 text-2xl font-extrabold tracking-tight">
+        <h1 className="min-h-8 text-2xl font-extrabold tracking-tight">
           {camp.data?.name}
         </h1>
-        <p className="mt-1 h-4 text-xs uppercase tracking-wide">
+        <p className="mt-1 min-h-4 text-xs uppercase tracking-wide">
           {camp.data?.organiser}
         </p>
       </header>
