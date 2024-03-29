@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import type { Camp } from "@prisma/client";
+import Button, { type ButtonProps } from "@ui/Button";
 import Badge from "@ui/Badge";
-import Button from "@ui/Button";
 import UserCard from "@ui/cards/UserCard";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
@@ -12,7 +12,7 @@ import StepInfo from "./StepInfo";
 
 type Props = {
   campId: Camp["id"];
-  onNext: () => void;
+  nextButtonProps: Partial<ButtonProps>;
   onBack: () => void;
 };
 
@@ -84,13 +84,14 @@ export default function RoomAssignmentStep(props: Props) {
         />
 
         <Button
-          text="Next"
-          type="button"
-          Icon={ArrowRightIcon}
+          {...props.nextButtonProps}
+          text={props.nextButtonProps.text ?? "Next"}
+          type={props.nextButtonProps.type ?? "button"}
+          Icon={props.nextButtonProps.Icon ?? ArrowRightIcon}
+          disabled={!isAllocated || props.nextButtonProps.disabled}
+          onClick={props.nextButtonProps.onClick}
           fullWidth
           className="justify-center"
-          disabled={!isAllocated}
-          onClick={props.onNext}
         />
       </div>
     </div>

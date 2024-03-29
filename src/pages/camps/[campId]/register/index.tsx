@@ -1,13 +1,14 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetServerSideProps } from "next";
 import Layout from "components/layout/Layout";
 import PersonalInformationStep from "components/register/PersonalInformationStep";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { isAuthed } from "utils/auth";
 import { trpc } from "utils/trpc";
 import RoomAssignmentStep from "components/register/RoomAssignmentStep";
 import ItineraryAssignmentStep from "components/register/ItineraryAssignmentStep";
+import type { ButtonProps } from "@ui/Button";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -15,7 +16,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: {} };
 };
 
-const Page: NextPage = () => {
+export default function Page() {
   const router = useRouter();
   const campId = router.query.campId as string;
   const [stepIdx, setStepIdx] = useState(0);
@@ -27,13 +28,27 @@ const Page: NextPage = () => {
     }
   );
 
+  const itinerary = trpc.itinerary.getAll.useQuery({ campId });
+  const campHasItineraryOption = useMemo(
+    () => itinerary.data?.some((i) => i.options.length > 0),
+    [itinerary.data]
+  );
+
+  const roomAssignmentNextButtonProps = useMemo<Partial<ButtonProps>>(() => {
+    if (campHasItineraryOption === undefined)
+      return { disabled: true, text: "Loading..." };
+    if (campHasItineraryOption === true)
+      return { onClick: () => stepIdx < 2 && setStepIdx(stepIdx + 1) };
+    return { text: "Finish", onClick: () => router.push(`/camps/${campId}`) };
+  }, [campHasItineraryOption, campId, router, stepIdx]);
+
   return (
     <Layout>
       <header className="-mx-4 -mt-8 mb-8 bg-indigo-600 px-4 py-8 text-indigo-50">
         <h1 className="min-h-8 text-2xl font-extrabold tracking-tight">
           {camp.data?.name}
         </h1>
-        <p className="mt-1 min-h-4 text-xs uppercase tracking-wide">
+        <p className="min-h-4 mt-1 text-xs uppercase tracking-wide">
           {camp.data?.organiser}
         </p>
       </header>
@@ -47,7 +62,7 @@ const Page: NextPage = () => {
           <RoomAssignmentStep
             campId={campId}
             onBack={() => stepIdx > 0 && setStepIdx(stepIdx - 1)}
-            onNext={() => stepIdx < 2 && setStepIdx(stepIdx + 1)}
+            nextButtonProps={roomAssignmentNextButtonProps}
           />
         )}
 
@@ -61,6 +76,4 @@ const Page: NextPage = () => {
       </div>
     </Layout>
   );
-};
-
-export default Page;
+}
