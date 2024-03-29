@@ -3,6 +3,7 @@ import { TrashIcon } from "@heroicons/react/20/solid";
 import Button from "@ui/Button";
 import { toast } from "react-hot-toast";
 import { trpc } from "utils/trpc";
+import { useRouter } from "next/router";
 
 type Props = {
   roomId: number;
@@ -11,10 +12,13 @@ type Props = {
 
 export default function DeleteRoomButton({ roomId, disabled }: Props) {
   const utils = trpc.useContext();
+  const router = useRouter();
+
   const { mutate, isLoading } = trpc.room.delete.useMutation({
     onSuccess: (data) => {
       toast.success(`${data.name} deleted`);
       utils.room.getAll.invalidate();
+      router.back();
     },
     onError: (error) => toast.error(error.message),
   });
