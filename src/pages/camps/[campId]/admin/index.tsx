@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetServerSideProps } from "next";
 import {
   CalendarIcon,
   DocumentTextIcon,
@@ -12,6 +12,7 @@ import { trpc } from "utils/trpc";
 import Link from "next/link";
 import { isAuthed } from "utils/auth";
 import Layout from "components/layout/Layout";
+import { useMemo } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -19,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: {} };
 };
 
-const Page: NextPage = () => {
+export default function Page() {
   const router = useRouter();
   const id = router.query.campId as string;
 
@@ -30,6 +31,33 @@ const Page: NextPage = () => {
     }
   );
 
+  const menuItems = useMemo(
+    () => [
+      {
+        name: "Edit details",
+        link: `/camps/${id}/admin/details`,
+        icon: DocumentTextIcon,
+      },
+      { name: "Edit rooms", link: `/camps/${id}/admin/rooms`, icon: KeyIcon },
+      {
+        name: "Edit teams",
+        link: `/camps/${id}/admin/teams`,
+        icon: UserGroupIcon,
+      },
+      {
+        name: "Edit itinerary",
+        link: `/camps/${id}/admin/itinerary`,
+        icon: CalendarIcon,
+      },
+      {
+        name: "Edit attendees",
+        link: `/camps/${id}/admin/attendee`,
+        icon: UserGroupIcon,
+      },
+    ],
+    [id]
+  );
+
   return (
     <Layout>
       <h1>Manage Camp</h1>
@@ -37,45 +65,18 @@ const Page: NextPage = () => {
         {data?.name}
       </h2>
       <div className="mt-6 flex flex-col gap-2">
-        <Link href={`/camps/${id}/admin/details`}>
-          <Button
-            text="Edit details"
-            Icon={DocumentTextIcon}
-            intent="secondary"
-            size="large"
-            fullWidth
-          />
-        </Link>
-        <Link href={`/camps/${id}/admin/rooms`}>
-          <Button
-            text="Edit rooms"
-            Icon={KeyIcon}
-            intent="secondary"
-            size="large"
-            fullWidth
-          />
-        </Link>
-        <Link href={`/camps/${id}/admin/teams`}>
-          <Button
-            text="Edit teams"
-            Icon={UserGroupIcon}
-            intent="secondary"
-            size="large"
-            fullWidth
-          />
-        </Link>
-        <Link href={`/camps/${id}/admin/itinerary`}>
-          <Button
-            text="Edit itinerary"
-            Icon={CalendarIcon}
-            intent="secondary"
-            size="large"
-            fullWidth
-          />
-        </Link>
+        {menuItems.map((item) => (
+          <Link key={item.name} href={item.link}>
+            <Button
+              text={item.name}
+              Icon={item.icon}
+              intent="secondary"
+              size="large"
+              fullWidth
+            />
+          </Link>
+        ))}
       </div>
     </Layout>
   );
-};
-
-export default Page;
+}

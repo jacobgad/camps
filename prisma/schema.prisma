@@ -15,6 +15,11 @@ enum Gender {
   female
 }
 
+enum AttendeeRole {
+  attendee
+  servant
+}
+
 model Camp {
   id             String          @id @default(cuid())
   name           String
@@ -41,6 +46,17 @@ model Member {
   teamId           Int?
 
   @@unique([campId, userId])
+}
+
+model Attendee {
+  id          Int          @id @default(autoincrement())
+  team        Team         @relation(fields: [teamId], references: [id])
+  teamId      Int
+  name        String
+  phoneNumber String
+  role        AttendeeRole
+
+  @@unique([teamId, phoneNumber])
 }
 
 model ItineraryItem {
@@ -85,13 +101,14 @@ model Room {
 }
 
 model Team {
-  id      Int      @id @default(autoincrement())
-  name    String
-  color   String
-  points  Int      @default(0)
-  members Member[]
-  camp    Camp     @relation(fields: [campId], references: [id])
-  campId  String
+  id       Int        @id @default(autoincrement())
+  name     String
+  color    String
+  points   Int        @default(0)
+  members  Member[]
+  camp     Camp       @relation(fields: [campId], references: [id])
+  campId   String
+  Attendee Attendee[]
 
   @@unique([name, campId])
 }
