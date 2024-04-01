@@ -4,8 +4,8 @@ import { isAuthed } from "utils/auth";
 import { toast } from "react-hot-toast";
 import { trpc } from "utils/trpc";
 import Layout from "components/layout/Layout";
-import AttendeeForm from "components/attendee/AttendeeForm";
-import DeleteAttendeeButton from "components/attendee/DeleteAttendeeButton";
+import DeleteAttendeeButton from "components/registrant/DeleteAttendeeButton";
+import RegistrantForm from "components/registrant/AttendeeForm";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const redirect = await isAuthed(context);
@@ -16,16 +16,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Page() {
   const router = useRouter();
   const campId = router.query.campId as string;
-  const attendeeId = Number(router.query.attendeeId as string);
+  const registrantId = Number(router.query.registrantId as string);
 
-  const { data } = trpc.attendee.get.useQuery(
-    { id: attendeeId },
+  const { data } = trpc.registrant.get.useQuery(
+    { id: registrantId },
     {
       onError: (error) => toast.error(error.message),
     }
   );
 
-  const { mutate, isLoading } = trpc.attendee.update.useMutation({
+  const { mutate, isLoading } = trpc.registrant.update.useMutation({
     onSuccess: (data) => {
       toast.success(`${data.name} updated`);
       router.push(`/camps/${campId}/admin/attendee`);
@@ -39,9 +39,9 @@ export default function Page() {
 
       {data && (
         <div>
-          <AttendeeForm
+          <RegistrantForm
             campId={campId}
-            onSubmit={(data) => mutate({ ...data, id: attendeeId })}
+            onSubmit={(data) => mutate({ ...data, id: registrantId })}
             defaultValues={data}
             buttonProps={{ text: "Save changes", isLoading }}
           />
@@ -49,7 +49,7 @@ export default function Page() {
       )}
 
       <div className="mt-4">
-        {data && <DeleteAttendeeButton attendeeId={attendeeId} />}
+        {data && <DeleteAttendeeButton registrantId={registrantId} />}
       </div>
     </Layout>
   );

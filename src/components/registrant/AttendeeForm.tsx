@@ -17,12 +17,12 @@ type Props = {
 
 const schema = z.object({
   name: z.string().min(3),
-  phoneNumber: phoneSchema,
+  phone: phoneSchema,
   teamId: z.number().positive(),
 });
 type Schema = z.infer<typeof schema>;
 
-export default function AttendeeForm(props: Props) {
+export default function RegistrantForm(props: Props) {
   const { register, handleSubmit, formState, reset } = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: props.defaultValues,
@@ -40,10 +40,10 @@ export default function AttendeeForm(props: Props) {
       className="flex h-full flex-col gap-6"
     >
       <Input label="Name" type="text" {...register("name")} />
-      <Input label="Phone number" type="text" {...register("phoneNumber")} />
+      <Input label="Phone number" type="text" {...register("phone")} />
 
       <div className="flex flex-col gap-1 text-sm">
-        <label htmlFor="color">Team</label>
+        <label htmlFor="color">Team</label>{" "}
         <select
           {...register("teamId", { valueAsNumber: true })}
           disabled={teams.isLoading}

@@ -15,7 +15,7 @@ enum Gender {
   female
 }
 
-enum AttendeeRole {
+enum RegistrantRole {
   attendee
   servant
 }
@@ -31,6 +31,7 @@ model Camp {
   members        Member[]
   organisers     User[]
   teams          Team[]
+  Registrant     Registrant[]
 }
 
 model Member {
@@ -44,19 +45,24 @@ model Member {
   roomId           Int
   team             Team?             @relation(fields: [teamId], references: [id])
   teamId           Int?
+  registrant       Registrant        @relation(fields: [registrantId], references: [id])
+  registrantId     Int
 
   @@unique([campId, userId])
 }
 
-model Attendee {
-  id          Int          @id @default(autoincrement())
-  team        Team         @relation(fields: [teamId], references: [id])
-  teamId      Int
-  name        String
-  phoneNumber String
-  role        AttendeeRole
+model Registrant {
+  id     Int            @id @default(autoincrement())
+  team   Team           @relation(fields: [teamId], references: [id])
+  teamId Int
+  camp   Camp           @relation(fields: [campId], references: [id])
+  campId String
+  name   String
+  phone  String
+  role   RegistrantRole
+  Member Member[]
 
-  @@unique([teamId, phoneNumber])
+  @@unique([campId, phone])
 }
 
 model ItineraryItem {
@@ -101,14 +107,14 @@ model Room {
 }
 
 model Team {
-  id       Int        @id @default(autoincrement())
-  name     String
-  color    String
-  points   Int        @default(0)
-  members  Member[]
-  camp     Camp       @relation(fields: [campId], references: [id])
-  campId   String
-  Attendee Attendee[]
+  id          Int          @id @default(autoincrement())
+  name        String
+  color       String
+  points      Int          @default(0)
+  members     Member[]
+  camp        Camp         @relation(fields: [campId], references: [id])
+  campId      String
+  Registrants Registrant[]
 
   @@unique([name, campId])
 }

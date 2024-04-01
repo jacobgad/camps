@@ -16,6 +16,7 @@ export const memberRouter = router({
           campId_userId: { userId: ctx.session.user.id, campId: input.campId },
         },
         include: {
+          registrant: { include: { team: true } },
           camp: {
             include: {
               itineraryItems: {
@@ -41,10 +42,7 @@ export const memberRouter = router({
           message: "member does not exist",
         });
 
-      return {
-        ...member,
-        team: sycTeams.find((user) => user.phone === member.user.phone),
-      };
+      return member;
     }),
 
   upsert: protectedProcedure
@@ -71,6 +69,13 @@ export const memberRouter = router({
         });
       }
 
+      if (!user.phone) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User phone number not registered",
+        });
+      }
+
       if (!room) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -89,6 +94,17 @@ export const memberRouter = router({
         throw new TRPCError({ code: "BAD_REQUEST", message: "Room is full" });
       }
 
+      const registrant = await ctx.prisma.registrant.findUnique({
+        where: { campId_phone: { campId: input.campId, phone: user.phone } },
+      });
+
+      if (!registrant) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Registration not found please contact a servant",
+        });
+      }
+
       const member = await ctx.prisma.member.upsert({
         where: {
           campId_userId: { campId: input.campId, userId: ctx.session.user.id },
@@ -97,6 +113,7 @@ export const memberRouter = router({
           campId: input.campId,
           userId: ctx.session.user.id,
           roomId: room.id,
+          registrantId: registrant.id,
         },
         update: {
           roomId: room.id,

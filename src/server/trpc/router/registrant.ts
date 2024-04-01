@@ -3,18 +3,19 @@ import { z } from "zod";
 import { router, protectedProcedure } from "../trpc";
 import { phoneSchema } from "utils/form";
 
-export const attendeeRouter = router({
+export const registrantRouter = router({
   create: protectedProcedure
     .input(
       z.object({
         name: z.string().min(3),
-        phoneNumber: phoneSchema,
+        phone: phoneSchema,
         teamId: z.number().positive(),
         role: z.enum(["servant", "attendee"]).default("attendee"),
+        campId: z.string().cuid(),
       })
     )
     .mutation(({ input, ctx }) => {
-      return ctx.prisma.attendee.create({ data: input });
+      return ctx.prisma.registrant.create({ data: input });
     }),
 
   getAll: protectedProcedure
@@ -28,7 +29,7 @@ export const attendeeRouter = router({
         where: { campId: input.campId },
       });
       const campTeamIds = campTeams.map((t) => t.id);
-      return ctx.prisma.attendee.findMany({
+      return ctx.prisma.registrant.findMany({
         where: { teamId: { in: campTeamIds } },
         include: { team: true },
         orderBy: { name: "asc" },
@@ -42,7 +43,7 @@ export const attendeeRouter = router({
       })
     )
     .query(({ input, ctx }) => {
-      return ctx.prisma.attendee.findUnique({
+      return ctx.prisma.registrant.findUnique({
         where: { id: input.id },
       });
     }),
@@ -52,7 +53,7 @@ export const attendeeRouter = router({
       z.object({
         id: z.number().int(),
         name: z.string().min(3),
-        phoneNumber: phoneSchema,
+        phone: phoneSchema,
         teamId: z.number().positive(),
       })
     )
@@ -66,7 +67,7 @@ export const attendeeRouter = router({
 
       if (!team) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-      return ctx.prisma.attendee.update({
+      return ctx.prisma.registrant.update({
         where: { id: input.id },
         data: input,
       });
@@ -88,6 +89,6 @@ export const attendeeRouter = router({
 
       if (!team) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-      return ctx.prisma.attendee.delete({ where: { id: input.id } });
+      return ctx.prisma.registrant.delete({ where: { id: input.id } });
     }),
 });

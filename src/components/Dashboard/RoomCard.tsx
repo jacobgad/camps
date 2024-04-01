@@ -14,7 +14,7 @@ export default function RoomCard({ room }: Props) {
         {room.name}
       </span>
       <span className="text font-medium text-indigo-600">
-        Code: {room.code}
+        {room.code && `Code: ${room.code}`}
       </span>
     </Card>
   );

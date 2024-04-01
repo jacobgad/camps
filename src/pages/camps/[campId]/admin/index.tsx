@@ -50,8 +50,8 @@ export default function Page() {
         icon: CalendarIcon,
       },
       {
-        name: "Edit attendees",
-        link: `/camps/${id}/admin/attendee`,
+        name: "Edit registrations",
+        link: `/camps/${id}/admin/registrations`,
         icon: UserGroupIcon,
       },
     ],

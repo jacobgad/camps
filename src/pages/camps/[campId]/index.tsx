@@ -48,10 +48,10 @@ const Page: NextPage = () => {
           {data?.camp.name}
           {isLoading && "Loading..."}
         </h1>
-        <p className="mt-1 min-h-4 text-xs font-medium uppercase tracking-wide text-gray-400">
+        <p className="min-h-4 mt-1 text-xs font-medium uppercase tracking-wide text-gray-400">
           {data?.camp.organiser}
         </p>
-        <p className="mt-4 min-h-4 text-gray-400">
+        <p className="min-h-4 mt-4 text-gray-400">
           {data?.user && `Welcome ${data.user.name ?? data.user.email}`}
         </p>
       </div>
@@ -80,7 +80,7 @@ const Page: NextPage = () => {
             className="mb-4 space-y-4"
           >
             {data?.room && <RoomCard room={data.room} />}
-            {data?.team && <TeamCard team={data.team} />}
+            {data?.registrant.team && <TeamCard team={data.registrant.team} />}
             {teams?.data && <TeamScoreBoard teams={teams.data} />}
           </motion.div>
         )}

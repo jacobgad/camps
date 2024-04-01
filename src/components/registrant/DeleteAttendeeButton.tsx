@@ -6,13 +6,16 @@ import { trpc } from "utils/trpc";
 import { useRouter } from "next/router";
 
 type Props = {
-  attendeeId: number;
+  registrantId: number;
   disabled?: ButtonProps["disabled"];
 };
 
-export default function DeleteAttendeeButton({ attendeeId, disabled }: Props) {
+export default function DeleteRegistrantButton({
+  registrantId,
+  disabled,
+}: Props) {
   const router = useRouter();
-  const { mutate, isLoading } = trpc.attendee.delete.useMutation({
+  const { mutate, isLoading } = trpc.registrant.delete.useMutation({
     onSuccess: (data) => {
       toast.success(`${data.name} deleted`);
       router.back();
@@ -27,7 +30,7 @@ export default function DeleteAttendeeButton({ attendeeId, disabled }: Props) {
       Icon={TrashIcon}
       fullWidth
       className="justify-center"
-      onClick={() => mutate({ id: attendeeId })}
+      onClick={() => mutate({ id: registrantId })}
       isLoading={isLoading}
       disabled={disabled}
     />

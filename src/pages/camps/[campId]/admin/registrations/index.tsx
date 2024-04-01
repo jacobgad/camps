@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Page() {
   const router = useRouter();
   const campId = router.query.campId as string;
-  const { data } = trpc.attendee.getAll.useQuery(
+  const { data } = trpc.registrant.getAll.useQuery(
     { campId },
     { initialData: [] }
   );
@@ -31,18 +31,18 @@ export default function Page() {
       getFilteredList({
         list: data,
         search: searchTerm,
-        getSearchableFields: (item) => [item.name, item.phoneNumber],
+        getSearchableFields: (item) => [item.name, item.phone],
       }),
     [data, searchTerm]
   );
 
   return (
     <Layout>
-      <h1 className="mb-6">Attendees</h1>
+      <h1 className="mb-6">Registrations</h1>
 
-      <Link href={`/camps/${campId}/admin/attendee/new`}>
+      <Link href={`/camps/${campId}/admin/registrations/new`}>
         <Button
-          text="Add new Attendee"
+          text="Add new Registration"
           Icon={PlusIcon}
           fullWidth
           className="justify-center"
@@ -60,7 +60,7 @@ export default function Page() {
       <ul className="my-6 flex flex-col gap-2">
         {attendees.map((attendee) => (
           <li key={attendee.id}>
-            <Link href={`/camps/${campId}/admin/attendee/${attendee.id}`}>
+            <Link href={`/camps/${campId}/admin/registrations/${attendee.id}`}>
               <ItemCard
                 label={attendee.name}
                 description={attendee.team.name}

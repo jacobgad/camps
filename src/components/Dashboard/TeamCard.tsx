@@ -1,9 +1,9 @@
 import { UserGroupIcon } from "@heroicons/react/24/outline";
+import type { Team } from "@prisma/client";
 import Card from "@ui/cards/Card";
-import type { sycTeams } from "utils/sycTeams";
 
 type Props = {
-  team: typeof sycTeams[number];
+  team: Team;
 };
 
 export default function TeamCard({ team }: Props) {
@@ -14,7 +14,7 @@ export default function TeamCard({ team }: Props) {
         Team: {team.name}
       </span>
       <div
-        className="h-8 w-8 rounded-full"
+        className={`h-8 w-8 rounded-full ${team.color}`}
         style={{ backgroundColor: team.color }}
       />
     </Card>
