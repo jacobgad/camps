@@ -8,6 +8,7 @@ import { memberRouter } from "./member";
 import { roomRouter } from "./room";
 import { teamRouter } from "./team";
 import { userRouter } from "./user";
+import { organiserRouter } from "./organisers";
 
 export const appRouter = router({
   example: exampleRouter,
@@ -19,6 +20,7 @@ export const appRouter = router({
   user: userRouter,
   team: teamRouter,
   registrant: registrantRouter,
+  organiser: organiserRouter,
 });
 
 // export type definition of API

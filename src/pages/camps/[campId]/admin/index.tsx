@@ -3,6 +3,7 @@ import {
   CalendarIcon,
   DocumentTextIcon,
   KeyIcon,
+  LockClosedIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import Button from "@ui/Button";
@@ -53,6 +54,11 @@ export default function Page() {
         name: "Edit registrations",
         link: `/camps/${id}/admin/registrations`,
         icon: UserGroupIcon,
+      },
+      {
+        name: "Edit organisers",
+        link: `/camps/${id}/admin/organisers`,
+        icon: LockClosedIcon,
       },
     ],
     [id]
