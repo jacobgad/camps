@@ -1,5 +1,4 @@
 import { TRPCError } from "@trpc/server";
-import { sycTeams } from "utils/sycTeams";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 

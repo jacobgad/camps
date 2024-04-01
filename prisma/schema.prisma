@@ -45,8 +45,8 @@ model Member {
   roomId           Int
   team             Team?             @relation(fields: [teamId], references: [id])
   teamId           Int?
-  registrant       Registrant        @relation(fields: [registrantId], references: [id])
-  registrantId     Int
+  registrant       Registrant?        @relation(fields: [registrantId], references: [id])
+  registrantId     Int?
 
   @@unique([campId, userId])
 }

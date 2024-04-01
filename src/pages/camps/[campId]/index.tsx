@@ -80,7 +80,7 @@ const Page: NextPage = () => {
             className="mb-4 space-y-4"
           >
             {data?.room && <RoomCard room={data.room} />}
-            {data?.registrant.team && <TeamCard team={data.registrant.team} />}
+            {data?.registrant?.team && <TeamCard team={data.registrant.team} />}
             {teams?.data && <TeamScoreBoard teams={teams.data} />}
           </motion.div>
         )}
