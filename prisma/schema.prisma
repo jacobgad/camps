@@ -20,6 +20,11 @@ enum RegistrantRole {
   servant
 }
 
+enum RoomType {
+  everyone
+  servant
+}
+
 model Camp {
   id             String          @id @default(cuid())
   name           String
@@ -45,7 +50,7 @@ model Member {
   roomId           Int
   team             Team?             @relation(fields: [teamId], references: [id])
   teamId           Int?
-  registrant       Registrant?        @relation(fields: [registrantId], references: [id])
+  registrant       Registrant?       @relation(fields: [registrantId], references: [id])
   registrantId     Int?
 
   @@unique([campId, userId])
@@ -102,6 +107,7 @@ model Room {
   camp     Camp     @relation(fields: [campId], references: [id])
   campId   String
   members  Member[]
+  type     RoomType @default(everyone)
 
   @@unique([name, campId])
 }

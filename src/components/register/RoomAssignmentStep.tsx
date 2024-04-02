@@ -36,11 +36,18 @@ export default function RoomAssignmentStep(props: Props) {
         <ul>
           {data?.map((room, idx) => (
             <li key={room.id}>
-              <div className="flex justify-between">
+              <div className="flex items-center">
                 <span>{room.name}</span>
-                <Badge
-                  title={`${room.capacity - room.members.length} open slots`}
-                />
+                {room.type === "servant" && (
+                  <span className="ml-3 rounded-full bg-orange-300 px-2.5 py-0.5 text-xs font-medium text-orange-900">
+                    Servant Room
+                  </span>
+                )}
+                <div className="ml-auto">
+                  <Badge
+                    title={`${room.capacity - room.members.length} open slots`}
+                  />
+                </div>
               </div>
               <ul className="my-2 flex flex-col gap-2">
                 <AnimatePresence initial={false}>

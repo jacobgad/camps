@@ -10,6 +10,7 @@ export const roomRouter = router({
         capacity: z.number().min(1),
         campId: z.string().cuid(),
         gender: z.enum(["male", "female"]),
+        type: z.enum(["servant", "everyone"]).default("everyone"),
       })
     )
     .mutation(({ input, ctx }) => {
@@ -28,6 +29,7 @@ export const roomRouter = router({
           campId: true,
           capacity: true,
           gender: true,
+          type: true,
           members: {
             include: {
               user: { select: { name: true } },
@@ -44,6 +46,19 @@ export const roomRouter = router({
         where: { id: ctx.session.user.id },
       });
 
+      if (!user?.phone) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Phone number not found in user profile",
+        });
+      }
+
+      const registrant = await ctx.prisma.registrant.findUnique({
+        where: {
+          campId_phone: { campId: input.campId, phone: user.phone },
+        },
+      });
+
       if (!user || !user.gender) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -52,7 +67,11 @@ export const roomRouter = router({
       }
 
       return ctx.prisma.room.findMany({
-        where: { campId: input.campId, gender: user.gender },
+        where: {
+          campId: input.campId,
+          gender: user.gender,
+          type: registrant?.role === "servant" ? undefined : "everyone",
+        },
         orderBy: { name: "asc" },
         include: {
           members: {
@@ -89,6 +108,7 @@ export const roomRouter = router({
         capacity: z.number().min(1),
         code: z.string().optional().nullable(),
         gender: z.enum(["male", "female"]),
+        type: z.enum(["servant", "everyone"]).default("everyone"),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -168,6 +188,7 @@ export const roomRouter = router({
         },
         include: {
           user: { include: { camps: { where: { id: room.campId } } } },
+          registrant: true,
         },
       });
 
@@ -189,6 +210,13 @@ export const roomRouter = router({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "User gender does not match room gender",
+        });
+      }
+
+      if (room.type === "servant" && reqMember.registrant?.role !== "servant") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "This room is reserved",
         });
       }
 

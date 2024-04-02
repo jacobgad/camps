@@ -19,10 +19,12 @@ const schema = z.object({
   campId: z.string().cuid(),
   code: z.string().optional().nullable(),
   gender: z.enum(["male", "female"]),
+  type: z.enum(["servant", "everyone"]).default("everyone"),
 });
 type Schema = z.infer<typeof schema>;
 
 const genderOptions = ["male", "female"];
+const typeOptions = ["servant", "everyone"];
 
 export default function RoomForm(props: Props) {
   const { register, handleSubmit, formState, reset } = useForm<Schema>({
@@ -67,6 +69,23 @@ export default function RoomForm(props: Props) {
             />
             <label htmlFor={`gender-${gender}`} className="ml-2 capitalize">
               {gender}
+            </label>
+          </div>
+        ))}
+      </div>
+
+      <div className="space-y-2 text-sm font-medium text-gray-700">
+        <p className="text-sm font-medium">Type</p>
+        {typeOptions.map((type) => (
+          <div key={type}>
+            <input
+              type="radio"
+              value={type}
+              id={`type-${type}`}
+              {...register("type")}
+            />
+            <label htmlFor={`type-${type}`} className="ml-2 capitalize">
+              {type}
             </label>
           </div>
         ))}
