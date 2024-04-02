@@ -33,6 +33,7 @@ const Page: NextPage = () => {
         campId={campId}
         onSubmit={(data) => mutate({ ...data, campId })}
         buttonProps={{ isLoading, Icon: PlusIcon, text: "Add new registrant" }}
+        defaultValues={{ role: "attendee" }}
       />
     </Layout>
   );

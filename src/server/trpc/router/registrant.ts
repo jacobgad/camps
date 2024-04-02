@@ -55,6 +55,7 @@ export const registrantRouter = router({
         name: z.string().min(3),
         phone: phoneSchema,
         teamId: z.number().positive(),
+        role: z.enum(["servant", "attendee"]).default("attendee"),
       })
     )
     .mutation(async ({ input, ctx }) => {

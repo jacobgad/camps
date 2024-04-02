@@ -28,7 +28,7 @@ export default function Page() {
   const { mutate, isLoading } = trpc.registrant.update.useMutation({
     onSuccess: (data) => {
       toast.success(`${data.name} updated`);
-      router.push(`/camps/${campId}/admin/attendee`);
+      router.push(`/camps/${campId}/admin/registrations`);
     },
     onError: (error) => toast.error(error.message),
   });

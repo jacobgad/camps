@@ -19,8 +19,11 @@ const schema = z.object({
   name: z.string().min(3),
   phone: phoneSchema,
   teamId: z.number().positive(),
+  role: z.enum(["attendee", "servant"]).default("attendee"),
 });
 type Schema = z.infer<typeof schema>;
+
+const registrantRole = ["attendee", "servant"];
 
 export default function RegistrantForm(props: Props) {
   const { register, handleSubmit, formState, reset } = useForm<Schema>({
@@ -55,6 +58,23 @@ export default function RegistrantForm(props: Props) {
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="space-y-2 text-sm font-medium text-gray-700">
+        <p className="text-sm font-medium">Gender</p>
+        {registrantRole.map((role) => (
+          <div key={role}>
+            <input
+              type="radio"
+              value={role}
+              id={`role-${role}`}
+              {...register("role")}
+            />
+            <label htmlFor={`role-${role}`} className="ml-2 capitalize">
+              {role}
+            </label>
+          </div>
+        ))}
       </div>
 
       <Button
