@@ -61,7 +61,7 @@ export const registrantRouter = router({
     .mutation(async ({ input, ctx }) => {
       const team = await ctx.prisma.team.findFirst({
         where: {
-          id: input.id,
+          id: input.teamId,
           camp: { organisers: { some: { id: ctx.session.user.id } } },
         },
       });
