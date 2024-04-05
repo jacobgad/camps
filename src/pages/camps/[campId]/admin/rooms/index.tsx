@@ -37,7 +37,9 @@ const Page: NextPage = () => {
           <li key={room.id}>
             <Link href={`/camps/${campId}/admin/rooms/${room.id}`}>
               <ItemCard
-                label={room.name}
+                label={`${room.name}${
+                  room.type === "servant" ? " - Servant Room" : ""
+                }`}
                 description={`${
                   room.gender === "male" ? "M" : "F"
                 } - Capacity ${room.members.length}/${room.capacity}`}
