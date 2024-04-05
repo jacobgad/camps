@@ -59,14 +59,14 @@ export const registrantRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const team = await ctx.prisma.team.findFirst({
+      const registrant = await ctx.prisma.registrant.findFirst({
         where: {
-          id: input.teamId,
+          id: input.id,
           camp: { organisers: { some: { id: ctx.session.user.id } } },
         },
       });
 
-      if (!team) throw new TRPCError({ code: "UNAUTHORIZED" });
+      if (!registrant) throw new TRPCError({ code: "UNAUTHORIZED" });
 
       return ctx.prisma.registrant.update({
         where: { id: input.id },
@@ -81,14 +81,14 @@ export const registrantRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const team = await ctx.prisma.team.findFirst({
+      const registrant = await ctx.prisma.registrant.findFirst({
         where: {
           id: input.id,
           camp: { organisers: { some: { id: ctx.session.user.id } } },
         },
       });
 
-      if (!team) throw new TRPCError({ code: "UNAUTHORIZED" });
+      if (!registrant) throw new TRPCError({ code: "UNAUTHORIZED" });
 
       return ctx.prisma.registrant.delete({ where: { id: input.id } });
     }),
