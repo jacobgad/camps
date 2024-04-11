@@ -10,6 +10,9 @@ import {
 import HeroLayout from "components/layout/HeroLayout";
 import Button from "@ui/Button";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Home: NextPage = () => {
   const session = useSession();
@@ -81,15 +84,7 @@ const Home: NextPage = () => {
             </span>
           </div>
 
-          <button
-            onClick={() => signIn("email", { callbackUrl })}
-            className="flex w-full items-center gap-4 rounded-lg border border-gray-700 p-4"
-          >
-            <EnvelopeIcon className="h-6 text-white" />
-            <span className="text-lg font-medium text-white">
-              Sign In with Email
-            </span>
-          </button>
+          <EmailSignInForm callbackUrl={callbackUrl} />
         </>
       )}
     </HeroLayout>
@@ -97,3 +92,50 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+type EmailSignInFormProps = {
+  callbackUrl: string;
+};
+
+function EmailSignInForm({ callbackUrl }: EmailSignInFormProps) {
+  type Schema = z.infer<typeof schema>;
+
+  const schema = z.object({
+    email: z.string().email(),
+  });
+
+  const { register, handleSubmit, formState } = useForm<Schema>({
+    resolver: zodResolver(schema),
+  });
+
+  return (
+    <form
+      onSubmit={handleSubmit(({ email }) =>
+        toast.promise(signIn("email", { email }), {
+          error: "Error signing in",
+          loading: "Loading...",
+          success: "Welcome",
+        })
+      )}
+      className="space-y-4"
+    >
+      <input
+        type="email"
+        {...register("email")}
+        placeholder="Email"
+        className="w-full rounded-lg border border-gray-700 bg-transparent px-4 py-2 text-lg text-white"
+      />
+      <button
+        onClick={() => signIn("email", { callbackUrl, redirect: false })}
+        type="submit"
+        disabled={!formState.isValid}
+        className="flex w-full items-center gap-4 rounded-lg border border-gray-700 p-4 disabled:opacity-50"
+      >
+        <EnvelopeIcon className="h-6 text-white" />
+        <span className="text-lg font-medium text-white">
+          Sign In with Email
+        </span>
+      </button>
+    </form>
+  );
+}
