@@ -23,7 +23,11 @@ type Schema = z.infer<typeof schema>;
 const colorOptions = [
   "bg-red-500",
   "bg-pink-500",
+  "bg-pink-600",
+  "bg-pink-400",
+  "bg-gray-50",
   "bg-gray-500",
+  "bg-zinc-900",
   "bg-yellow-800",
   "bg-green-500",
   "bg-blue-400",
